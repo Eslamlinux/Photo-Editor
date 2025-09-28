@@ -158,3 +158,8 @@ void MainWindow::createToolBar() {
     toolBar->Realize();
 }
 
+void MainWindow::createStatusBar() {
+    m_statusBar = new StatusBar(this);
+    SetStatusBar(m_statusBar);
+}
+
