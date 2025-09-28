@@ -109,4 +109,12 @@ void MainWindow::createMenuBar() {
     helpMenu->Append(wxID_HELP, _("&Help Contents\tF1"));
     helpMenu->Append(wxID_ABOUT, _("&About PhotoMagicEditor"));
 
+    // Add menus to menu bar
+    menuBar->Append(fileMenu, _("&File"));
+    menuBar->Append(editMenu, _("&Edit"));
+    menuBar->Append(viewMenu, _("&View"));
+    menuBar->Append(imageMenu, _("&Image"));
+    menuBar->Append(helpMenu, _("&Help"));
+
+
 
