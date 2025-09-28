@@ -63,3 +63,10 @@ bool PhotoEditorApp::OnInit() {
     pme::ui::MainFrame* frame = new pme::ui::MainFrame("Photo Editor");
     frame->Show();
     
+    // فتح الملف إذا تم تحديده
+    if (!m_filePath.empty()) {
+        frame->OpenFile(m_filePath);
+    }
+    
+    return true;
+}
