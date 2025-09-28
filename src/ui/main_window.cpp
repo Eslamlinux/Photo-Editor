@@ -80,3 +80,16 @@ void MainWindow::createMenuBar() {
     editMenu->Append(ID_DESELECT, _("&Deselect\tCtrl+D"));
     
     
+    
+    // View menu
+    wxMenu* viewMenu = new wxMenu();
+    viewMenu->Append(ID_ZOOM_IN, _("Zoom &In\tCtrl++"));
+    viewMenu->Append(ID_ZOOM_OUT, _("Zoom &Out\tCtrl+-"));
+    viewMenu->Append(ID_ZOOM_ACTUAL, _("Actual &Size\tCtrl+0"));
+    viewMenu->Append(ID_ZOOM_FIT, _("&Fit to Window\tCtrl+F"));
+    viewMenu->AppendSeparator();
+    viewMenu->AppendCheckItem(ID_TOGGLE_DARK_MODE, _("&Dark Mode"));
+    viewMenu->AppendSeparator();
+    viewMenu->AppendCheckItem(ID_SHOW_TOOLS, _("Show &Tools Panel"));
+    viewMenu->AppendCheckItem(ID_SHOW_LAYERS, _("Show &Layers Panel"));
+    viewMenu->AppendCheckItem(ID_SHOW_PROPERTIES, _("Show &Properties Panel"));
