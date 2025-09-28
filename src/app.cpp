@@ -114,4 +114,21 @@ bool PhotoEditorApp::OnExceptionInMainLoop() {
     return false;
 }
 
+void PhotoEditorApp::OnUnhandledException() {
+    wxLogError("Unhandled exception in PhotoEditorApp::OnUnhandledException");
+}
 
+void PhotoEditorApp::OnFatalException() {
+    wxLogError("Fatal exception in PhotoEditorApp::OnFatalException");
+}
+
+bool PhotoEditorApp::initializeLocale() {
+    // تهيئة التدويل
+    m_locale = new wxLocale(wxLANGUAGE_DEFAULT);
+    
+    // إضافة مسار الترجمة
+    wxString localeDir = wxStandardPaths::Get().GetResourcesDir() + wxFILE_SEP_PATH + "locale";
+    if (wxDir::Exists(localeDir)) {
+        m_locale->AddCatalogLookupPathPrefix(localeDir);
+    }
+    
