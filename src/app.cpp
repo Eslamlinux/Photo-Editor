@@ -56,3 +56,10 @@ bool PhotoEditorApp::OnInit() {
         wxLogWarning("Failed to initialize configuration.");
     }
     
+    // عرض شاشة البداية
+    showSplashScreen();
+    
+    // إنشاء الإطار الرئيسي
+    pme::ui::MainFrame* frame = new pme::ui::MainFrame("Photo Editor");
+    frame->Show();
+    
