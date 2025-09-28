@@ -24,3 +24,13 @@ public:
     virtual void OnUnhandledException() override;
     virtual void OnFatalException() override;
     
+private:
+    bool initializeLocale();
+    bool initializeConfig();
+    void showSplashScreen();
+    
+    wxString m_filePath;
+    wxLocale* m_locale;
+    wxConfigBase* m_config;
+};
+
