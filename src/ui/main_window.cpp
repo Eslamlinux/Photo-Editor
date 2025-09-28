@@ -221,3 +221,10 @@ oid MainWindow::createPanels() {
         .MaximizeButton(false));
 }
 
+void MainWindow::applyTheme() {
+    wxColour bgColor = m_darkMode ? wxColour(40, 40, 40) : wxColour(240, 240, 240);
+    wxColour fgColor = m_darkMode ? wxColour(220, 220, 220) : wxColour(20, 20, 20);
+    
+    SetBackgroundColour(bgColor);
+    SetForegroundColour(fgColor);
+
