@@ -139,3 +139,22 @@ void MainWindow::createMenuBar() {
     Bind(wxEVT_MENU, &MainWindow::onRemoveBackground, this, ID_REMOVE_BACKGROUND);
     Bind(wxEVT_MENU, &MainWindow::onAbout, this, wxID_ABOUT);
 }
+
+void MainWindow::createToolBar() {
+    wxToolBar* toolBar = CreateToolBar(wxTB_HORIZONTAL | wxTB_FLAT | wxTB_TEXT);
+    
+    toolBar->AddTool(wxID_NEW, _("New"), wxArtProvider::GetBitmap(wxART_NEW), _("New Project"));
+    toolBar->AddTool(wxID_OPEN, _("Open"), wxArtProvider::GetBitmap(wxART_FILE_OPEN), _("Open Project"));
+    toolBar->AddTool(wxID_SAVE, _("Save"), wxArtProvider::GetBitmap(wxART_FILE_SAVE), _("Save Project"));
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_UNDO, _("Undo"), wxArtProvider::GetBitmap(wxART_UNDO), _("Undo"));
+    toolBar->AddTool(wxID_REDO, _("Redo"), wxArtProvider::GetBitmap(wxART_REDO), _("Redo"));
+    toolBar->AddSeparator();
+    toolBar->AddTool(ID_CROP, _("Crop"), wxArtProvider::GetBitmap(wxART_CUT), _("Crop Image"));
+    toolBar->AddTool(ID_ROTATE, _("Rotate"), wxArtProvider::GetBitmap(wxART_REDO), _("Rotate Image"));
+    toolBar->AddSeparator();
+    toolBar->AddTool(ID_REMOVE_BACKGROUND, _("Remove BG"), wxArtProvider::GetBitmap(wxART_DELETE), _("Remove Background"));
+    
+    toolBar->Realize();
+}
+
