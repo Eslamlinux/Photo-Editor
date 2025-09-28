@@ -175,3 +175,22 @@ oid MainWindow::createPanels() {
     
     // Create layers panel
     m_layersPanel = new LayersPanel(this);
+   // Create properties panel
+    m_propertiesPanel = new PropertiesPanel(this);
+    
+    // Add panels to AUI manager
+    m_auiManager.AddPane(m_canvasPanel, wxAuiPaneInfo()
+        .Name("canvas")
+        .CenterPane()
+        .Caption(_("Canvas"))
+        .CloseButton(false)
+        .MaximizeButton(true));
+    
+    m_auiManager.AddPane(m_toolsPanel, wxAuiPaneInfo()
+        .Name("tools")
+        .Caption(_("Tools"))
+        .Left()
+        .BestSize(wxSize(200, 600))
+        .CloseButton(true)
+        .MaximizeButton(false));
+
