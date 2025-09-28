@@ -132,3 +132,20 @@ bool PhotoEditorApp::initializeLocale() {
         m_locale->AddCatalogLookupPathPrefix(localeDir);
     }
     
+    // إضافة كتالوج الترجمة
+    m_locale->AddCatalog("photo_editor");
+    
+    return true;
+}
+
+bool PhotoEditorApp::initializeConfig() {
+    // إنشاء تكوين
+    m_config = wxConfigBase::Create();
+    
+    // تعيين التكوين الافتراضي
+    wxConfigBase::Set(m_config);
+    
+    return true;
+}
+
+
