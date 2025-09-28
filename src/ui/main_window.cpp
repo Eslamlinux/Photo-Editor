@@ -228,3 +228,21 @@ void MainWindow::applyTheme() {
     SetBackgroundColour(bgColor);
     SetForegroundColour(fgColor);
 
+ 
+    // Update menu checkmark
+    wxMenuBar* menuBar = GetMenuBar();
+    if (menuBar) {
+        wxMenu* viewMenu = menuBar->GetMenu(menuBar->FindMenu(_("View")));
+        if (viewMenu) {
+            viewMenu->Check(ID_TOGGLE_DARK_MODE, m_darkMode);
+        }
+    }
+    
+    // Notify all panels about theme change
+    wxCommandEvent event(wxEVT_THEME_CHANGED);
+    event.SetInt(m_darkMode ? 1 : 0);
+    ProcessWindowEvent(event);
+    
+    Refresh();
+}
+
