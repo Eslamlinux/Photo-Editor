@@ -70,3 +70,25 @@ bool PhotoEditorApp::OnInit() {
     
     return true;
 }
+
+int PhotoEditorApp::OnExit() {
+    // تنظيف الموارد
+    if (m_locale) {
+        delete m_locale;
+        m_locale = nullptr;
+    }
+    
+    if (m_config) {
+        delete m_config;
+        m_config = nullptr;
+    }
+    
+    return wxApp::OnExit();
+}
+
+void PhotoEditorApp::OnInitCmdLine(wxCmdLineParser& parser) {
+    wxApp::OnInitCmdLine(parser);
+    
+    parser.AddParam("image file", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL);
+}
+
