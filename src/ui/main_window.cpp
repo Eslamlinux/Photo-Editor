@@ -93,3 +93,17 @@ void MainWindow::createMenuBar() {
     viewMenu->AppendCheckItem(ID_SHOW_TOOLS, _("Show &Tools Panel"));
     viewMenu->AppendCheckItem(ID_SHOW_LAYERS, _("Show &Layers Panel"));
     viewMenu->AppendCheckItem(ID_SHOW_PROPERTIES, _("Show &Properties Panel"));
+
+    // Image menu
+    wxMenu* imageMenu = new wxMenu();
+    imageMenu->Append(ID_CROP, _("&Crop"));
+    imageMenu->Append(ID_ROTATE, _("&Rotate..."));
+    imageMenu->Append(ID_RESIZE, _("Re&size..."));
+    imageMenu->AppendSeparator();
+    imageMenu->Append(ID_ADJUST_BRIGHTNESS, _("Adjust &Brightness..."));
+    imageMenu->Append(ID_ADJUST_CONTRAST, _("Adjust &Contrast..."));
+    imageMenu->Append(ID_ADJUST_SATURATION, _("Adjust &Saturation..."));
+    imageMenu->AppendSeparator();
+    imageMenu->Append(ID_REMOVE_BACKGROUND, _("Remove &Background"));
+
+
