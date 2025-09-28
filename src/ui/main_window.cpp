@@ -126,3 +126,16 @@ void MainWindow::createMenuBar() {
     Bind(wxEVT_MENU, &MainWindow::onOpen, this, wxID_OPEN);
       this, wxID_NEW);
     Bind(wxEVT_MENU, &MainWindow::onOpen, this, wxID_OPEN);
+    Bind(wxEVT_MENU, &MainWindow::onSave, this, wxID_SAVE);
+    Bind(wxEVT_MENU, &MainWindow::onSaveAs, this, wxID_SAVEAS);
+    Bind(wxEVT_MENU, &MainWindow::onImportImage, this, ID_IMPORT_IMAGE);
+    Bind(wxEVT_MENU, &MainWindow::onExportImage, this, ID_EXPORT_IMAGE);
+    Bind(wxEVT_MENU, &MainWindow::onExit, this, wxID_EXIT);
+    
+    Bind(wxEVT_MENU, &MainWindow::onUndo, this, wxID_UNDO);
+    Bind(wxEVT_MENU, &MainWindow::onRedo, this, wxID_REDO);
+    
+    Bind(wxEVT_MENU, &MainWindow::onToggleDarkMode, this, ID_TOGGLE_DARK_MODE);
+    Bind(wxEVT_MENU, &MainWindow::onRemoveBackground, this, ID_REMOVE_BACKGROUND);
+    Bind(wxEVT_MENU, &MainWindow::onAbout, this, wxID_ABOUT);
+}
