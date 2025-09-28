@@ -148,4 +148,23 @@ bool PhotoEditorApp::initializeConfig() {
     return true;
 }
 
+void PhotoEditorApp::showSplashScreen() {
+    // تخطي شاشة البداية في الإصدار الحالي لتجنب مشاكل الرسم
+    return;
+    
+    /* تم تعطيل هذا الكود مؤقتًا لتجنب مشاكل الرسم
+    // إنشاء صورة شاشة البداية
+    wxBitmap bitmap;
+    
+    // محاولة تحميل صورة شاشة البداية
+    wxString splashPath = wxStandardPaths::Get().GetResourcesDir() + wxFILE_SEP_PATH + "splash.png";
+    if (wxFileExists(splashPath)) {
+        bitmap.LoadFile(splashPath, wxBITMAP_TYPE_PNG);
+    } else {
+        // إنشاء صورة شاشة بداية افتراضية
+        bitmap = wxBitmap(400, 300);
+        wxMemoryDC dc(bitmap);
+        dc.SetBackground(wxBrush(wxColour(64, 64, 64)));
+        dc.Clear();
+        
 
