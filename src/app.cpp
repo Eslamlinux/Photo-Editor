@@ -167,4 +167,19 @@ void PhotoEditorApp::showSplashScreen() {
         dc.SetBackground(wxBrush(wxColour(64, 64, 64)));
         dc.Clear();
         
- 
+        // رسم النص
+        dc.SetTextForeground(wxColour(255, 255, 255));
+        dc.SetFont(wxFont(24, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+        
+        wxString appName = "Photo Editor";
+        wxSize textSize = dc.GetTextExtent(appName);
+        dc.DrawText(appName, (400 - textSize.GetWidth()) / 2, 100);
+        
+        dc.SetFont(wxFont(12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+        wxString version = "Version 1.0";
+        textSize = dc.GetTextExtent(version);
+        dc.DrawText(version, (400 - textSize.GetWidth()) / 2, 150);
+        
+        dc.SelectObject(wxNullBitmap);
+    }
+
