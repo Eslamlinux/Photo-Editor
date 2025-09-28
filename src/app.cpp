@@ -167,4 +167,4 @@ void PhotoEditorApp::showSplashScreen() {
         dc.SetBackground(wxBrush(wxColour(64, 64, 64)));
         dc.Clear();
         
-
+ 
