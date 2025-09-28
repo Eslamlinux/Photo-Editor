@@ -163,3 +163,15 @@ void MainWindow::createStatusBar() {
     SetStatusBar(m_statusBar);
 }
 
+oid MainWindow::createPanels() {
+    // Create canvas panel (central area)
+    m_canvasPanel = new CanvasPanel(this, m_imageProcessor.get());
+    
+    // Create tools panel
+    m_toolsPanel = new ToolsPanel(this, m_imageProcessor.get());
+    
+    // Create project browser panel
+    m_projectBrowser = new ProjectBrowser(this, m_projectRepository.get());
+    
+    // Create layers panel
+    m_layersPanel = new LayersPanel(this);
