@@ -79,8 +79,6 @@ void MainWindow::createMenuBar() {
     editMenu->Append(ID_SELECT_ALL, _("Select &All\tCtrl+A"));
     editMenu->Append(ID_DESELECT, _("&Deselect\tCtrl+D"));
     
-    
-    
     // View menu
     wxMenu* viewMenu = new wxMenu();
     viewMenu->Append(ID_ZOOM_IN, _("Zoom &In\tCtrl++"));
@@ -105,5 +103,10 @@ void MainWindow::createMenuBar() {
     imageMenu->Append(ID_ADJUST_SATURATION, _("Adjust &Saturation..."));
     imageMenu->AppendSeparator();
     imageMenu->Append(ID_REMOVE_BACKGROUND, _("Remove &Background"));
+
+    // Help menu
+    wxMenu* helpMenu = new wxMenu();
+    helpMenu->Append(wxID_HELP, _("&Help Contents\tF1"));
+    helpMenu->Append(wxID_ABOUT, _("&About PhotoMagicEditor"));
 
 
