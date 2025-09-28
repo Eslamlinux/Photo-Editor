@@ -67,3 +67,16 @@ void MainWindow::createMenuBar() {
     fileMenu->AppendSeparator();
     fileMenu->Append(wxID_EXIT, _("E&xit\tAlt+F4"));
     
+    // Edit menu
+    wxMenu* editMenu = new wxMenu();
+    editMenu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
+    editMenu->Append(wxID_REDO, _("&Redo\tCtrl+Y"));
+    editMenu->AppendSeparator();
+    editMenu->Append(wxID_CUT, _("Cu&t\tCtrl+X"));
+    editMenu->Append(wxID_COPY, _("&Copy\tCtrl+C"));
+    editMenu->Append(wxID_PASTE, _("&Paste\tCtrl+V"));
+    editMenu->AppendSeparator();
+    editMenu->Append(ID_SELECT_ALL, _("Select &All\tCtrl+A"));
+    editMenu->Append(ID_DESELECT, _("&Deselect\tCtrl+D"));
+    
+    
