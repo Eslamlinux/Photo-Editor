@@ -182,4 +182,14 @@ void PhotoEditorApp::showSplashScreen() {
         
         dc.SelectObject(wxNullBitmap);
     }
-
+    
+    // عرض شاشة البداية
+    wxSplashScreen* splash = new wxSplashScreen(bitmap,
+                                              wxSPLASH_CENTRE_ON_SCREEN | wxSPLASH_TIMEOUT,
+                                              3000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+                                              wxBORDER_SIMPLE | wxSTAY_ON_TOP);
+    
+    // تحديث النافذة
+    wxYield();
+    */
+}
