@@ -118,3 +118,11 @@ void MainWindow::createMenuBar() {
 
 
 
+  // Set menu bar
+    SetMenuBar(menuBar);
+    
+    // Bind menu events
+    Bind(wxEVT_MENU, &MainWindow::onNew, this, wxID_NEW);
+    Bind(wxEVT_MENU, &MainWindow::onOpen, this, wxID_OPEN);
+      this, wxID_NEW);
+    Bind(wxEVT_MENU, &MainWindow::onOpen, this, wxID_OPEN);
