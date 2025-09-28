@@ -194,3 +194,19 @@ oid MainWindow::createPanels() {
         .CloseButton(true)
         .MaximizeButton(false));
 
+  
+    m_auiManager.AddPane(m_projectBrowser, wxAuiPaneInfo()
+        .Name("projects")
+        .Caption(_("Projects"))
+        .Left()
+        .BestSize(wxSize(200, 300))
+        .CloseButton(true)
+        .MaximizeButton(false));
+    
+    m_auiManager.AddPane(m_layersPanel, wxAuiPaneInfo()
+        .Name("layers")
+        .Caption(_("Layers"))
+        .Right()
+        .BestSize(wxSize(200, 300))
+        .CloseButton(true)
+        .MaximizeButton(false));
