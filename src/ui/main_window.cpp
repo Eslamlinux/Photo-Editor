@@ -210,3 +210,14 @@ oid MainWindow::createPanels() {
         .BestSize(wxSize(200, 300))
         .CloseButton(true)
         .MaximizeButton(false));
+
+  
+    m_auiManager.AddPane(m_propertiesPanel, wxAuiPaneInfo()
+        .Name("properties")
+        .Caption(_("Properties"))
+        .Right()
+        .BestSize(wxSize(200, 300))
+        .CloseButton(true)
+        .MaximizeButton(false));
+}
+
