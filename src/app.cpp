@@ -92,3 +92,26 @@ void PhotoEditorApp::OnInitCmdLine(wxCmdLineParser& parser) {
     parser.AddParam("image file", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL);
 }
 
+bool PhotoEditorApp::OnCmdLineParsed(wxCmdLineParser& parser) {
+    wxApp::OnCmdLineParsed(parser);
+    
+    if (parser.GetParamCount() > 0) {
+        m_filePath = parser.GetParam(0);
+    }
+    
+    return true;
+}
+
+bool PhotoEditorApp::OnExceptionInMainLoop() {
+    try {
+        throw;
+    } catch (const std::exception& e) {
+        wxLogError("Unhandled exception: %s", e.what());
+    } catch (...) {
+        wxLogError("Unhandled exception of unknown type");
+    }
+    
+    return false;
+}
+
+
