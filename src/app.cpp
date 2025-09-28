@@ -34,3 +34,25 @@ private:
     wxConfigBase* m_config;
 };
 
+wxIMPLEMENT_APP(PhotoEditorApp);
+
+bool PhotoEditorApp::OnInit() {
+    // تعيين اسم التطبيق
+    SetAppName("PhotoEditor");
+    
+    // تهيئة خيارات النظام
+    wxSystemOptions::SetOption("msw.remap", 0);
+    
+    // تهيئة معالجات الصور
+    wxInitAllImageHandlers();
+    
+    // تهيئة التدويل
+    if (!initializeLocale()) {
+        wxLogWarning("Failed to initialize locale.");
+    }
+    
+    // تهيئة التكوين
+    if (!initializeConfig()) {
+        wxLogWarning("Failed to initialize configuration.");
+    }
+    
