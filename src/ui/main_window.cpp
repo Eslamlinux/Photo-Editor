@@ -506,3 +506,15 @@ void MainWindow::onRemoveBackground(wxCommandEvent& event) {
     );
     
     progressDialog.Update(10);
+    
+    // Process in a separate thread to avoid UI freezing
+    std::thread bgThread([this, &progressDialog]() {
+        try {
+            // Remove background
+            bool success = m_imageProcessor->removeBackground();
+            
+            // Update UI in main thread
+            wxTheApp->CallAfter([this, success, &progressDialog]() {
+                progressDialog.Update(100);
+                
+  
