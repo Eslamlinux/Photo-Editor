@@ -246,3 +246,10 @@ void MainWindow::applyTheme() {
     Refresh();
 }
 
+void MainWindow::onNew(wxCommandEvent& event) {
+    // Check for unsaved changes
+    if (hasUnsavedChanges() && !confirmDiscardChanges()) {
+        return;
+    }
+
+
