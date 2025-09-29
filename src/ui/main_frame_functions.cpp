@@ -248,3 +248,31 @@ void MainFrame::onResize(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
+
+void MainFrame::onOilPainting(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Oil Painting"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSlider* sizeSlider = new wxSlider(&dialog, wxID_ANY, 5, 1, 10, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* sizeText = new wxStaticText(&dialog, wxID_ANY, "5");
+    wxSlider* dynRatioSlider = new wxSlider(&dialog, wxID_ANY, 1, 1, 5, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* dynRatioText = new wxStaticText(&dialog, wxID_ANY, "1");
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // ربط حدث تغيير المنزلق
+    sizeSlider->Bind(wxEVT_SLIDER, [sizeSlider, sizeText](wxCommandEvent&) {
+        sizeText->SetLabel(wxString::Format("%d", sizeSlider->GetValue()));
+    });
+    
+    dynRatioSlider->Bind(wxEVT_SLIDER, [dynRatioSlider, dynRatioText](wxCommandEvent&) {
+        dynRatioText->SetLabel(wxString::Format("%d", dynRatioSlider->GetValue()));
+    });
+
