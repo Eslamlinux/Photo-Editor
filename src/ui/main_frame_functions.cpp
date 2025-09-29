@@ -56,3 +56,19 @@ void MainFrame::createMenuBar()
     m_menuBar->Append(editMenu, _("&Edit"));
     
     // إنشاء قائمة المرشحات
+wxMenu* filterMenu = new wxMenu();
+    filterMenu->Append(ID_GRAYSCALE, _("&Grayscale"));
+    filterMenu->Append(ID_SEPIA, _("S&epia"));
+    filterMenu->Append(ID_NEGATIVE, _("&Negative"));
+    filterMenu->Append(ID_BLUR, _("&Blur..."));
+    filterMenu->Append(ID_SHARPEN, _("&Sharpen"));
+    filterMenu->Append(ID_EDGE_DETECTION, _("&Edge Detection"));
+    filterMenu->Append(ID_EMBOSS, _("E&mboss"));
+    filterMenu->Append(ID_CARTOON, _("&Cartoon"));
+    filterMenu->Append(ID_WATERCOLOR, _("&Watercolor"));
+    filterMenu->Append(ID_MOSAIC, _("&Mosaic..."));
+    filterMenu->Append(wxID_NEW + 101, _("&Oil Painting"));
+    filterMenu->Append(wxID_NEW + 102, _("&Pencil Sketch"));
+    m_menuBar->Append(filterMenu, _("&Filter"));
+    
+    // إنشاء قائمة التعديل
