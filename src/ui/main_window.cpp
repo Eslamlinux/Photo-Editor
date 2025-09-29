@@ -282,3 +282,23 @@ void MainWindow::onNew(wxCommandEvent& event) {
         project.width = width;
         project.height = height;
         
+  int projectId = m_projectRepository->createProject(project);
+        if (projectId > 0) {
+            // Create blank image
+            cv::Mat blankImage(height, width, CV_8UC3, cv::Scalar(255, 255, 255));
+            m_imageProcessor->setImage(blankImage);
+            
+            // Update UI
+            m_canvasPanel->updateCanvas();
+            m_statusBar->setStatusText(wxString::Format(_("New project created: %s (%dx%d)"), 
+                                                      name, width, height));
+            
+            // Save initial state
+            m_currentProjectId = projectId;
+            m_currentProjectName = name;
+            m_hasUnsavedChanges = false;
+            updateTitle();
+        }
+    }
+}
+
