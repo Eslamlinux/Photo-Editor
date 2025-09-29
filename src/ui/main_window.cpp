@@ -451,3 +451,19 @@ void MainWindow::onExportImage(wxCommandEvent& event) {
     }
 }
 
+void MainWindow::onExit(wxCommandEvent& event) {
+    Close();
+}
+
+void MainWindow::onClose(wxCloseEvent& event) {
+    // Check for unsaved changes
+    if (hasUnsavedChanges() && !confirmDiscardChanges()) {
+        if (event.CanVeto()) {
+            event.Veto();
+            return;
+        }
+    }
+    
+    // Destroy the frame
+    Destroy();
+}
