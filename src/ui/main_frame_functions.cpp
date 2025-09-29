@@ -134,3 +134,14 @@ void MainFrame::onBrightness(wxCommandEvent& event) {
     wxStaticText* valueText = new wxStaticText(&dialog, wxID_ANY, "0");
     wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
     wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // ربط حدث تغيير المنزلق
+    slider->Bind(wxEVT_SLIDER, [slider, valueText](wxCommandEvent&) {
+        valueText->SetLabel(wxString::Format("%d", slider->GetValue()));
+    });
+    
+    // إنشاء السايزر
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
