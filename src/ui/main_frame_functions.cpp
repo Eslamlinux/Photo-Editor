@@ -239,3 +239,12 @@ void MainFrame::onResize(wxCommandEvent& event)
     mainSizer->Fit(&dialog);
     
     // عرض مربع الحوار
+
+    if (dialog.ShowModal() == wxID_OK) {
+        // تغيير حجم الصورة
+        m_imageProcessor->resize(widthCtrl->GetValue(), heightCtrl->GetValue());
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
