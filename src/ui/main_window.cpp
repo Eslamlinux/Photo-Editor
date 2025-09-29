@@ -302,3 +302,9 @@ void MainWindow::onNew(wxCommandEvent& event) {
     }
 }
 
+void MainWindow::onOpen(wxCommandEvent& event) {
+    // Check for unsaved changes
+    if (hasUnsavedChanges() && !confirmDiscardChanges()) {
+        return;
+    }
+
