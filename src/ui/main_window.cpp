@@ -366,3 +366,13 @@ void MainWindow::onSaveAs(wxCommandEvent& event) {
         }
     }
 }
+void MainWindow::onImportImage(wxCommandEvent& event) {
+    wxFileDialog openDialog(
+        this, 
+        _("Import Image"), 
+        "", 
+        "",
+        _("Image files (*.jpg;*.jpeg;*.png;*.webp)|*.jpg;*.jpeg;*.png;*.webp|All files (*.*)|*.*"),
+        wxFD_OPEN | wxFD_FILE_MUST_EXIST
+    );
+
