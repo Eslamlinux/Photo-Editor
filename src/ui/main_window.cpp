@@ -615,3 +615,31 @@ core::db::Project project = *projectOpt;
     cv::imencode(".jpg", thumbnail, thumbnailData);
     project.thumbnail = thumbnailData;
 
+ 
+    // Update project in database
+    if (m_projectRepository->updateProject(project)) {
+        // Save current image as main layer
+        core::db::Layer mainLayer;
+        mainLayer.projectId = m_currentProjectId;
+        mainLayer.name = "Main Layer";
+        mainLayer.type = "image";
+        mainLayer.visible = true;
+        mainLayer.orderIndex = 0;
+        
+        // Encode image data
+        std::vector<uchar> imageData;
+        cv::imencode(".png", m_imageProcessor->getImage(), imageData);
+        mainLayer.data = imageData;
+        
+        // Save layer
+        m_projectRepository->addLayer(mainLayer);
+        
+        // Update UI
+        m_hasUnsavedChanges = false;
+        updateTitle();
+        m_statusBar->setStatusText(wxString::Format(_("Project saved: %s"), m_currentProjectName));
+    } else {
+        wxMessageBox(_("Failed to save project."), _("Error"), wxICON_ERROR | wxOK, this);
+    }
+}
+
