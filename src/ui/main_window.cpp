@@ -343,3 +343,10 @@ void MainWindow::onSaveAs(wxCommandEvent& event) {
         project.width = imageSize.width;
         project.height = imageSize.height;
         
+ // Create thumbnail
+        cv::Mat thumbnail;
+        cv::resize(m_imageProcessor->getImage(), thumbnail, cv::Size(200, 200 * imageSize.height / imageSize.width));
+        std::vector<uchar> thumbnailData;
+        cv::imencode(".jpg", thumbnail, thumbnailData);
+        project.thumbnail = thumbnailData;
+        
