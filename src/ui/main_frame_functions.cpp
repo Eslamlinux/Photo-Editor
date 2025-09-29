@@ -653,3 +653,85 @@ void MainFrame::onAddVignette(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
+
+
+void MainFrame::onAddWatermark(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار اختيار الملف
+    wxFileDialog openFileDialog(this, _("Open Watermark Image"), "", "", 
+                              "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.tiff)|*.png;*.jpg;*.jpeg;*.bmp;*.tiff", 
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    
+    // عرض مربع حوار اختيار الملف
+    if (openFileDialog.ShowModal() == wxID_CANCEL) {
+        return;
+    }
+    
+    // الحصول على مسار الملف
+    wxString filePath = openFileDialog.GetPath();
+    
+    // تحميل العلامة المائية
+    cv::Mat watermark = cv::imread(filePath.ToStdString(), cv::IMREAD_UNCHANGED);
+    
+    // التحقق من نجاح التحميل
+    if (watermark.empty()) {
+        wxMessageBox(_("Failed to load watermark image."), _("Error"), wxICON_ERROR | wxOK);
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Add Watermark"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSlider* alphaSlider = new wxSlider(&dialog, wxID_ANY, 30, 1, 100, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* alphaText = new wxStaticText(&dialog, wxID_ANY, "0.3");
+    wxSpinCtrl* xCtrl = new wxSpinCtrl(&dialog, wxID_ANY, "-1", wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -1, m_imageProcessor->getWidth(), -1);
+    wxSpinCtrl* yCtrl = new wxSpinCtrl(&dialog, wxID_ANY, "-1", wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, -1, m_imageProcessor->getHeight(), -1);
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // ربط حدث تغيير المنزلق
+    alphaSlider->Bind(wxEVT_SLIDER, [alphaSlider, alphaText](wxCommandEvent&) {
+        alphaText->SetLabel(wxString::Format("%.1f", alphaSlider->GetValue() / 100.0));
+    });
+    
+    // إنشاء السايزر
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
+    wxFlexGridSizer* gridSizer = new wxFlexGridSizer(3, 2, 5, 5);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Opacity:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(alphaSlider, 0, wxEXPAND);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, ""), 0);
+    gridSizer->Add(alphaText, 0);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Position X:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(xCtrl, 0, wxEXPAND);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Position Y:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(yCtrl, 0, wxEXPAND);
+    
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Watermark Settings:")), 0, wxALL, 5);
+    mainSizer->Add(gridSizer, 0, wxEXPAND | wxALL, 10);
+    mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Note: Position -1 means center")), 0, wxALL, 5);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
+    if (dialog.ShowModal() == wxID_OK) {
+        // تطبيق إضافة العلامة المائية
+        m_imageProcessor->addWatermark(watermark, alphaSlider->GetValue() / 100.0, xCtrl->GetValue(), yCtrl->GetValue());
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
