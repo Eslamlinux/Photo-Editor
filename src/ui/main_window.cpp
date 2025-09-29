@@ -593,3 +593,11 @@ void MainWindow::saveCurrentProject() {
         return;
     }
     
+ 
+    // Get current project
+    auto projectOpt = m_projectRepository->getProject(m_currentProjectId);
+    if (!projectOpt) {
+        wxMessageBox(_("Failed to retrieve project."), _("Error"), wxICON_ERROR | wxOK, this);
+        return;
+    }
+    
