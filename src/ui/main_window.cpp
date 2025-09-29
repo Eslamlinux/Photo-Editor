@@ -325,3 +325,12 @@ void MainWindow::onSave(wxCommandEvent& event) {
     saveCurrentProject();
 }
 
+void MainWindow::onSaveAs(wxCommandEvent& event) {
+    // Show save as dialog
+    wxString name = wxGetTextFromUser(
+        _("Enter project name:"),
+        _("Save Project As"),
+        m_currentProjectName,
+        this
+    );
+    
