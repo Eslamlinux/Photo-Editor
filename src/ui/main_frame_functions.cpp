@@ -125,3 +125,12 @@ void MainFrame::onBrightness(wxCommandEvent& event) {
     if (!m_imageProcessor->hasImage()) {
         return;
     }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Brightness"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSlider* slider = new wxSlider(&dialog, wxID_ANY, 0, -100, 100, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* valueText = new wxStaticText(&dialog, wxID_ANY, "0");
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
