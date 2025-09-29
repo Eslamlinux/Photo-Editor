@@ -496,3 +496,13 @@ void MainWindow::onRemoveBackground(wxCommandEvent& event) {
         wxMessageBox(_("No image loaded."), _("Error"), wxICON_ERROR | wxOK, this);
         return;
     }
+   // Show progress dialog
+    wxProgressDialog progressDialog(
+        _("Removing Background"),
+        _("Processing image with AI model..."),
+        100,
+        this,
+        wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH
+    );
+    
+    progressDialog.Update(10);
