@@ -195,3 +195,24 @@ void MainFrame::onResize(wxCommandEvent& event)
     double aspectRatio = static_cast<double>(currentWidth) / currentHeight;
     
     // ربط حدث تغيير العرض
+ 
+    // ربط حدث تغيير العرض
+    widthCtrl->Bind(wxEVT_SPINCTRL, [widthCtrl, heightCtrl, aspectRatioCheck, aspectRatio](wxCommandEvent&) {
+        if (aspectRatioCheck->IsChecked()) {
+            int newWidth = widthCtrl->GetValue();
+            int newHeight = static_cast<int>(newWidth / aspectRatio);
+            heightCtrl->SetValue(newHeight);
+        }
+    });
+    
+    // ربط حدث تغيير الارتفاع
+    heightCtrl->Bind(wxEVT_SPINCTRL, [widthCtrl, heightCtrl, aspectRatioCheck, aspectRatio](wxCommandEvent&) {
+        if (aspectRatioCheck->IsChecked()) {
+            int newHeight = heightCtrl->GetValue();
+            int newWidth = static_cast<int>(newHeight * aspectRatio);
+            widthCtrl->SetValue(newWidth);
+        }
+    });
+    
+    // إنشاء السايزر
+
