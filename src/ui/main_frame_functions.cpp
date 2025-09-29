@@ -540,3 +540,30 @@ void MainFrame::onCropToAspectRatio(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
+
+void MainFrame::onAddBorder(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Add Border"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSpinCtrl* sizeCtrl = new wxSpinCtrl(&dialog, wxID_ANY, "10", wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 10);
+    wxButton* colorButton = new wxButton(&dialog, wxID_ANY, _("Choose Color..."));
+    wxColour selectedColor = *wxWHITE;
+    colorButton->Bind(wxEVT_BUTTON, [&selectedColor, &dialog](wxCommandEvent&) {
+        wxColourData data;
+        data.SetColour(selectedColor);
+        wxColourDialog dlg(&dialog, &data);
+        if (dlg.ShowModal() == wxID_OK) {
+            selectedColor = dlg.GetColourData().GetColour();
+        }
+    });
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // إنشاء السايزر
