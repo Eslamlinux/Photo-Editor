@@ -463,3 +463,28 @@ void MainFrame::onAdaptiveSharpen(wxCommandEvent& event)
     });
 
 
+
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Strength:")), 0, wxALL, 5);
+    mainSizer->Add(strengthSlider, 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(strengthText, 0, wxALIGN_CENTER | wxALL, 5);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
+    if (dialog.ShowModal() == wxID_OK) {
+        // تطبيق التحديد التكيفي
+        m_imageProcessor->sharpenAdaptive(strengthSlider->GetValue());
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
