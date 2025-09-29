@@ -407,3 +407,18 @@ void MainWindow::onImportImage(wxCommandEvent& event) {
     }
 }
 
+void MainWindow::onExportImage(wxCommandEvent& event) {
+    if (m_imageProcessor->getImage().empty()) {
+        wxMessageBox(_("No image to export."), _("Error"), wxICON_ERROR | wxOK, this);
+        return;
+    }
+    
+    wxFileDialog saveDialog(
+        this, 
+        _("Export Image"), 
+        "", 
+        "",
+        _("JPEG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|WebP files (*.webp)|*.webp"),
+        wxFD_SAVE | wxFD_OVERWRITE_PROMPT
+    );
+
