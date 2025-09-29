@@ -401,3 +401,9 @@ void MainWindow::onImportImage(wxCommandEvent& event) {
             m_hasUnsavedChanges = true;
             updateTitle();
 
+       } else {
+            wxMessageBox(_("Failed to load image."), _("Error"), wxICON_ERROR | wxOK, this);
+        }
+    }
+}
+
