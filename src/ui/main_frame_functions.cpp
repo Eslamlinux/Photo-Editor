@@ -180,3 +180,18 @@ void MainFrame::onResize(wxCommandEvent& event)
     
     // إنشاء مربع حوار
     wxDialog dialog(this, wxID_ANY, _("Resize Image"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSpinCtrl* widthCtrl = new wxSpinCtrl(&dialog, wxID_ANY, wxString::Format("%d", currentWidth), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 10000, currentWidth);
+    wxSpinCtrl* heightCtrl = new wxSpinCtrl(&dialog, wxID_ANY, wxString::Format("%d", currentHeight), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 10000, currentHeight);
+    wxCheckBox* aspectRatioCheck = new wxCheckBox(&dialog, wxID_ANY, _("Maintain aspect ratio"));
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // تعيين حالة الاختيار الافتراضية
+    aspectRatioCheck->SetValue(true);
+    
+    // حساب نسبة العرض إلى الارتفاع
+    double aspectRatio = static_cast<double>(currentWidth) / currentHeight;
+    
+    // ربط حدث تغيير العرض
