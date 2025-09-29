@@ -268,3 +268,17 @@ void MainWindow::onNew(wxCommandEvent& event) {
         project.width = width;
         project.height = height;
         
+  // Create new project dialog
+    NewProjectDialog dialog(this);
+    if (dialog.ShowModal() == wxID_OK) {
+        // Get project settings
+        int width = dialog.GetWidth();
+        int height = dialog.GetHeight();
+        wxString name = dialog.GetProjectName();
+        
+        // Create new project
+        core::db::Project project;
+        project.name = name.ToStdString();
+        project.width = width;
+        project.height = height;
+        
