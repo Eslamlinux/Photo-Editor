@@ -488,3 +488,21 @@ void MainFrame::onAdaptiveSharpen(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
+
+
+void MainFrame::onCropToAspectRatio(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Crop to Aspect Ratio"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSpinCtrl* widthCtrl = new wxSpinCtrl(&dialog, wxID_ANY, "16", wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 16);
+    wxSpinCtrl* heightCtrl = new wxSpinCtrl(&dialog, wxID_ANY, "9", wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 9);
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+
