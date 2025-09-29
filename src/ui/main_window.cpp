@@ -422,3 +422,23 @@ void MainWindow::onExportImage(wxCommandEvent& event) {
         wxFD_SAVE | wxFD_OVERWRITE_PROMPT
     );
 
+  
+    if (saveDialog.ShowModal() == wxID_OK) {
+        wxString path = saveDialog.GetPath();
+        
+        // Determine format from extension
+        wxFileName fileName(path);
+        wxString ext = fileName.GetExt().Lower();
+        
+        std::string format;
+        if (ext == "jpg" || ext == "jpeg") {
+            format = "jpg";
+        } else if (ext == "png") {
+            format = "png";
+        } else if (ext == "webp") {
+            format = "webp";
+        } else {
+            // Default to jpg
+            format = "jpg";
+            path += ".jpg";
+        }
