@@ -361,3 +361,18 @@ void MainFrame::onAutoWhiteBalance(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
+
+void MainFrame::onAutoContrast(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق تعديل التباين التلقائي
+    m_imageProcessor->autoContrast();
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
+
