@@ -20,3 +20,23 @@
 #include <wx/msgdlg.h>
 #include <opencv2/imgcodecs.hpp>
 
+
+namespace pme {
+namespace ui {
+
+// إضافة عناصر القائمة الجديدة إلى دالة createMenuBar
+void MainFrame::createMenuBar()
+{
+    // إنشاء شريط القوائم
+    m_menuBar = new wxMenuBar();
+    
+    // إنشاء قائمة الملف
+    wxMenu* fileMenu = new wxMenu();
+    fileMenu->Append(wxID_OPEN, _("&Open...\tCtrl+O"));
+    fileMenu->Append(wxID_SAVE, _("&Save\tCtrl+S"));
+    fileMenu->Append(wxID_SAVEAS, _("Save &As...\tCtrl+Shift+S"));
+    fileMenu->AppendSeparator();
+    fileMenu->Append(wxID_EXIT, _("E&xit\tAlt+F4"));
+    m_menuBar->Append(fileMenu, _("&File"));
+    
+    // إنشاء قائمة التحرير
