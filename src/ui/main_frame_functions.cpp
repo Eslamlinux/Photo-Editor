@@ -567,3 +567,25 @@ void MainFrame::onAddBorder(wxCommandEvent& event)
     wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
     
     // إنشاء السايزر
+
+    // إنشاء السايزر
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
+    wxFlexGridSizer* gridSizer = new wxFlexGridSizer(2, 2, 5, 5);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Size:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(sizeCtrl, 0, wxEXPAND);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Color:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(colorButton, 0, wxEXPAND);
+    
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(gridSizer, 0, wxEXPAND | wxALL, 10);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
