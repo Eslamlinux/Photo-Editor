@@ -100,3 +100,12 @@ wxMenu* adjustMenu = new wxMenu();
     viewMenu->Append(ID_TOGGLE_INFO, _("Show &Info\tI"));
     m_menuBar->Append(viewMenu, _("&View"));
     
+
+    // إنشاء قائمة الأدوات
+    wxMenu* toolsMenu = new wxMenu();
+    toolsMenu->Append(wxID_NEW + 108, _("Crop to Aspect &Ratio..."));
+    toolsMenu->Append(wxID_NEW + 109, _("Add &Border..."));
+    toolsMenu->Append(wxID_NEW + 110, _("Add &Vignette..."));
+    toolsMenu->Append(wxID_NEW + 111, _("Add &Watermark..."));
+    toolsMenu->Append(wxID_NEW + 112, _("Add &Text..."));
+    m_menuBar->Append(toolsMenu, _("&Tools"));
