@@ -115,3 +115,13 @@ wxMenu* adjustMenu = new wxMenu();
     helpMenu->Append(wxID_ABOUT, _("&About..."));
     m_menuBar->Append(helpMenu, _("&Help"));
   
+ 
+    // تعيين شريط القوائم
+    SetMenuBar(m_menuBar);
+}
+
+void MainFrame::onBrightness(wxCommandEvent& event) {
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
