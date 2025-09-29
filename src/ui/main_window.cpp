@@ -467,3 +467,12 @@ void MainWindow::onClose(wxCloseEvent& event) {
     // Destroy the frame
     Destroy();
 }
+
+void MainWindow::onUndo(wxCommandEvent& event) {
+    if (m_imageProcessor->undoLastOperation()) {
+        m_canvasPanel->updateCanvas();
+        m_statusBar->setStatusText(_("Undo"));
+        m_hasUnsavedChanges = true;
+        updateTitle();
+    }
+}
