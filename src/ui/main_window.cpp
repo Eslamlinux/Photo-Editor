@@ -320,3 +320,8 @@ void MainWindow::onSave(wxCommandEvent& event) {
         return;
     }
     
+ 
+    // Save current project
+    saveCurrentProject();
+}
+
