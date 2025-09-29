@@ -295,3 +295,23 @@ void MainFrame::onOilPainting(wxCommandEvent& event)
     dialog.SetSizer(mainSizer);
     mainSizer->Fit(&dialog);
 
+
+    if (dialog.ShowModal() == wxID_OK) {
+        // تطبيق تأثير الرسم الزيتي
+        m_imageProcessor->oilPainting(sizeSlider->GetValue(), dynRatioSlider->GetValue());
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
+
+void MainFrame::onPencilSketch(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Pencil Sketch"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
