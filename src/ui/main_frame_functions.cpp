@@ -40,3 +40,19 @@ void MainFrame::createMenuBar()
     m_menuBar->Append(fileMenu, _("&File"));
     
     // إنشاء قائمة التحرير
+
+    wxMenu* editMenu = new wxMenu();
+    editMenu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
+    editMenu->Append(wxID_REDO, _("&Redo\tCtrl+Y"));
+    editMenu->AppendSeparator();
+    editMenu->Append(ID_CROP, _("&Crop\tC"));
+    editMenu->Append(ID_ROTATE_90_CW, _("Rotate 90° &Clockwise\tR"));
+    editMenu->Append(ID_ROTATE_90_CCW, _("Rotate 90° &Counter-Clockwise\tShift+R"));
+    editMenu->Append(ID_ROTATE_180, _("Rotate &180°\tCtrl+R"));
+    editMenu->Append(ID_FLIP_HORIZONTAL, _("Flip &Horizontal\tH"));
+    editMenu->Append(ID_FLIP_VERTICAL, _("Flip &Vertical\tV"));
+    editMenu->AppendSeparator();
+    editMenu->Append(wxID_NEW + 100, _("&Resize...\tCtrl+Alt+R"));
+    m_menuBar->Append(editMenu, _("&Edit"));
+    
+    // إنشاء قائمة المرشحات
