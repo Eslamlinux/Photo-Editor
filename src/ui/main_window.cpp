@@ -486,3 +486,8 @@ void MainWindow::onRedo(wxCommandEvent& event) {
     }
 }
 
+
+void MainWindow::onToggleDarkMode(wxCommandEvent& event) {
+    m_darkMode = !m_darkMode;
+    applyTheme();
+}
