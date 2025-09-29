@@ -601,3 +601,17 @@ void MainWindow::saveCurrentProject() {
         return;
     }
     
+core::db::Project project = *projectOpt;
+    
+    // Update project data
+    cv::Size imageSize = m_imageProcessor->getImageSize();
+    project.width = imageSize.width;
+    project.height = imageSize.height;
+    
+    // Create thumbnail
+    cv::Mat thumbnail;
+    cv::resize(m_imageProcessor->getImage(), thumbnail, cv::Size(200, 200 * imageSize.height / imageSize.width));
+    std::vector<uchar> thumbnailData;
+    cv::imencode(".jpg", thumbnail, thumbnailData);
+    project.thumbnail = thumbnailData;
+
