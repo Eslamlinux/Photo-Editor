@@ -376,3 +376,18 @@ void MainFrame::onAutoContrast(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
+
+void MainFrame::onAutoColorEnhance(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق تحسين اللون التلقائي
+    m_imageProcessor->autoColorEnhance();
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
+
