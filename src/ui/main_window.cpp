@@ -358,3 +358,11 @@ void MainWindow::onSaveAs(wxCommandEvent& event) {
             m_hasUnsavedChanges = false;
             updateTitle();
   
+           
+            // Save all layers
+            saveCurrentProject();
+            
+            m_statusBar->setStatusText(wxString::Format(_("Project saved as: %s"), name));
+        }
+    }
+}
