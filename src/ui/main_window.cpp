@@ -308,3 +308,15 @@ void MainWindow::onOpen(wxCommandEvent& event) {
         return;
     }
 
+ 
+    // Show project browser in open mode
+    m_projectBrowser->showOpenDialog();
+}
+
+void MainWindow::onSave(wxCommandEvent& event) {
+    if (m_currentProjectId <= 0) {
+        // No current project, use Save As instead
+        onSaveAs(event);
+        return;
+    }
+    
