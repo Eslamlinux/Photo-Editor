@@ -145,3 +145,16 @@ void MainFrame::onBrightness(wxCommandEvent& event) {
     buttonSizer->Add(okButton, 0, wxALL, 5);
     buttonSizer->Add(cancelButton, 0, wxALL, 5);
     
+ 
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Adjust brightness:")), 0, wxALL, 5);
+    mainSizer->Add(slider, 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(valueText, 0, wxALIGN_CENTER | wxALL, 5);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
