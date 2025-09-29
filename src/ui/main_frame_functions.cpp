@@ -72,3 +72,19 @@ wxMenu* filterMenu = new wxMenu();
     m_menuBar->Append(filterMenu, _("&Filter"));
     
     // إنشاء قائمة التعديل
+wxMenu* adjustMenu = new wxMenu();
+    adjustMenu->Append(ID_BRIGHTNESS, _("&Brightness..."));
+    adjustMenu->Append(ID_CONTRAST, _("&Contrast..."));
+    adjustMenu->Append(ID_SATURATION, _("&Saturation..."));
+    adjustMenu->Append(ID_HUE, _("&Hue..."));
+    adjustMenu->Append(ID_GAMMA, _("&Gamma..."));
+    adjustMenu->Append(ID_TEMPERATURE, _("&Temperature..."));
+    adjustMenu->Append(ID_SHADOWS_HIGHLIGHTS, _("&Shadows/Highlights..."));
+    adjustMenu->AppendSeparator();
+    adjustMenu->Append(wxID_NEW + 103, _("&Auto White Balance"));
+    adjustMenu->Append(wxID_NEW + 104, _("Auto &Contrast"));
+    adjustMenu->Append(wxID_NEW + 105, _("Auto Color &Enhance"));
+    adjustMenu->Append(wxID_NEW + 106, _("Reduce &Noise"));
+    adjustMenu->Append(wxID_NEW + 107, _("Adaptive &Sharpen"));
+    m_menuBar->Append(adjustMenu, _("&Adjust"));
+    
