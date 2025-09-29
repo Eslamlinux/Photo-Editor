@@ -391,3 +391,25 @@ void MainFrame::onAutoColorEnhance(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
+
+void MainFrame::onReduceNoise(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Reduce Noise"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSlider* strengthSlider = new wxSlider(&dialog, wxID_ANY, 3, 1, 10, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* strengthText = new wxStaticText(&dialog, wxID_ANY, "3");
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // ربط حدث تغيير المنزلق
+    strengthSlider->Bind(wxEVT_SLIDER, [strengthSlider, strengthText](wxCommandEvent&) {
+        strengthText->SetLabel(wxString::Format("%d", strengthSlider->GetValue()));
+    });
+    
