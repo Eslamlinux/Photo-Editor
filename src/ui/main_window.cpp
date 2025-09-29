@@ -540,3 +540,20 @@ void MainWindow::onRemoveBackground(wxCommandEvent& event) {
             });
         }
     });
+   
+    // Detach thread to let it run independently
+    bgThread.detach();
+}
+
+void MainWindow::onAbout(wxCommandEvent& event) {
+    wxAboutDialogInfo info;
+    info.SetName(_("PhotoMagicEditor"));
+    info.SetVersion(_("1.0"));
+    info.SetDescription(_("A professional photo editing software with AI capabilities"));
+    info.SetCopyright(_("(C) 2023"));
+    info.SetWebSite(_("https://photomagiceditor.example.com"));
+    info.AddDeveloper(_("Your Name"));
+    
+    wxAboutBox(info, this);
+}
+
