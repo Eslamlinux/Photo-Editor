@@ -604,3 +604,52 @@ void MainFrame::onAddBorder(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
+
+
+void MainFrame::onAddVignette(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Add Vignette"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSlider* strengthSlider = new wxSlider(&dialog, wxID_ANY, 50, 1, 100, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* strengthText = new wxStaticText(&dialog, wxID_ANY, "0.5");
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // ربط حدث تغيير المنزلق
+    strengthSlider->Bind(wxEVT_SLIDER, [strengthSlider, strengthText](wxCommandEvent&) {
+        strengthText->SetLabel(wxString::Format("%.1f", strengthSlider->GetValue() / 100.0));
+    });
+    
+    // إنشاء السايزر
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Strength:")), 0, wxALL, 5);
+    mainSizer->Add(strengthSlider, 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(strengthText, 0, wxALIGN_CENTER | wxALL, 5);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
+    if (dialog.ShowModal() == wxID_OK) {
+        // تطبيق إضافة التلاشي
+        m_imageProcessor->addVignette(strengthSlider->GetValue() / 100.0);
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
+
