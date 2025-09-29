@@ -376,3 +376,28 @@ void MainWindow::onImportImage(wxCommandEvent& event) {
         wxFD_OPEN | wxFD_FILE_MUST_EXIST
     );
 
+    if (openDialog.ShowModal() == wxID_OK) {
+        wxString path = openDialog.GetPath();
+        
+        // Load image using OpenCV
+        cv::Mat image = cv::imread(path.ToStdString());
+        if (!image.empty()) {
+            // Check for unsaved changes
+            if (hasUnsavedChanges() && !confirmDiscardChanges()) {
+                return;
+            }
+            
+            // Set image to processor
+            m_imageProcessor->setImage(image);
+            
+            // Update UI
+            m_canvasPanel->updateCanvas();
+            
+            // Update status
+            wxFileName fileName(path);
+            m_statusBar->setStatusText(wxString::Format(_("Imported image: %s"), fileName.GetFullName()));
+            
+            // Mark as unsaved changes
+            m_hasUnsavedChanges = true;
+            updateTitle();
+
