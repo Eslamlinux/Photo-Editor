@@ -589,3 +589,18 @@ void MainFrame::onAddBorder(wxCommandEvent& event)
     mainSizer->Fit(&dialog);
     
     // عرض مربع الحوار
+
+    // عرض مربع الحوار
+    if (dialog.ShowModal() == wxID_OK) {
+        // تحويل اللون من wxWidgets إلى OpenCV
+        wxColour color = selectedColor;
+        cv::Scalar cvColor(color.Blue(), color.Green(), color.Red());
+        
+        // تطبيق إضافة الحدود
+        m_imageProcessor->addBorder(sizeCtrl->GetValue(), cvColor);
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
+
