@@ -216,3 +216,26 @@ void MainFrame::onResize(wxCommandEvent& event)
     
     // إنشاء السايزر
 
+
+
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
+    wxFlexGridSizer* gridSizer = new wxFlexGridSizer(2, 2, 5, 5);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Width:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(widthCtrl, 0, wxEXPAND);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Height:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(heightCtrl, 0, wxEXPAND);
+    
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(gridSizer, 0, wxEXPAND | wxALL, 10);
+    mainSizer->Add(aspectRatioCheck, 0, wxEXPAND | wxLEFT | wxRIGHT, 10);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxTOP | wxBOTTOM, 10);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
