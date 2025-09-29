@@ -173,3 +173,10 @@ void MainFrame::onResize(wxCommandEvent& event)
     if (!m_imageProcessor->hasImage()) {
         return;
     }
+    
+    // الحصول على أبعاد الصورة الحالية
+    int currentWidth = m_imageProcessor->getWidth();
+    int currentHeight = m_imageProcessor->getHeight();
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Resize Image"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
