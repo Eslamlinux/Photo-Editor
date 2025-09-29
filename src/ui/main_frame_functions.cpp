@@ -20,7 +20,6 @@
 #include <wx/msgdlg.h>
 #include <opencv2/imgcodecs.hpp>
 
-
 namespace pme {
 namespace ui {
 
@@ -40,7 +39,6 @@ void MainFrame::createMenuBar()
     m_menuBar->Append(fileMenu, _("&File"));
     
     // إنشاء قائمة التحرير
-
     wxMenu* editMenu = new wxMenu();
     editMenu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
     editMenu->Append(wxID_REDO, _("&Redo\tCtrl+Y"));
@@ -56,7 +54,7 @@ void MainFrame::createMenuBar()
     m_menuBar->Append(editMenu, _("&Edit"));
     
     // إنشاء قائمة المرشحات
-wxMenu* filterMenu = new wxMenu();
+    wxMenu* filterMenu = new wxMenu();
     filterMenu->Append(ID_GRAYSCALE, _("&Grayscale"));
     filterMenu->Append(ID_SEPIA, _("S&epia"));
     filterMenu->Append(ID_NEGATIVE, _("&Negative"));
@@ -72,7 +70,7 @@ wxMenu* filterMenu = new wxMenu();
     m_menuBar->Append(filterMenu, _("&Filter"));
     
     // إنشاء قائمة التعديل
-wxMenu* adjustMenu = new wxMenu();
+    wxMenu* adjustMenu = new wxMenu();
     adjustMenu->Append(ID_BRIGHTNESS, _("&Brightness..."));
     adjustMenu->Append(ID_CONTRAST, _("&Contrast..."));
     adjustMenu->Append(ID_SATURATION, _("&Saturation..."));
@@ -88,7 +86,6 @@ wxMenu* adjustMenu = new wxMenu();
     adjustMenu->Append(wxID_NEW + 107, _("Adaptive &Sharpen"));
     m_menuBar->Append(adjustMenu, _("&Adjust"));
     
-
     // إنشاء قائمة العرض
     wxMenu* viewMenu = new wxMenu();
     viewMenu->Append(ID_ZOOM_IN, _("Zoom &In\t+"));
@@ -100,7 +97,6 @@ wxMenu* adjustMenu = new wxMenu();
     viewMenu->Append(ID_TOGGLE_INFO, _("Show &Info\tI"));
     m_menuBar->Append(viewMenu, _("&View"));
     
-
     // إنشاء قائمة الأدوات
     wxMenu* toolsMenu = new wxMenu();
     toolsMenu->Append(wxID_NEW + 108, _("Crop to Aspect &Ratio..."));
@@ -109,13 +105,12 @@ wxMenu* adjustMenu = new wxMenu();
     toolsMenu->Append(wxID_NEW + 111, _("Add &Watermark..."));
     toolsMenu->Append(wxID_NEW + 112, _("Add &Text..."));
     m_menuBar->Append(toolsMenu, _("&Tools"));
- 
+    
     // إنشاء قائمة المساعدة
     wxMenu* helpMenu = new wxMenu();
     helpMenu->Append(wxID_ABOUT, _("&About..."));
     m_menuBar->Append(helpMenu, _("&Help"));
-  
- 
+    
     // تعيين شريط القوائم
     SetMenuBar(m_menuBar);
 }
@@ -145,7 +140,6 @@ void MainFrame::onBrightness(wxCommandEvent& event) {
     buttonSizer->Add(okButton, 0, wxALL, 5);
     buttonSizer->Add(cancelButton, 0, wxALL, 5);
     
- 
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Adjust brightness:")), 0, wxALL, 5);
     mainSizer->Add(slider, 0, wxEXPAND | wxALL, 5);
@@ -195,8 +189,6 @@ void MainFrame::onResize(wxCommandEvent& event)
     double aspectRatio = static_cast<double>(currentWidth) / currentHeight;
     
     // ربط حدث تغيير العرض
- 
-    // ربط حدث تغيير العرض
     widthCtrl->Bind(wxEVT_SPINCTRL, [widthCtrl, heightCtrl, aspectRatioCheck, aspectRatio](wxCommandEvent&) {
         if (aspectRatioCheck->IsChecked()) {
             int newWidth = widthCtrl->GetValue();
@@ -215,9 +207,6 @@ void MainFrame::onResize(wxCommandEvent& event)
     });
     
     // إنشاء السايزر
-
-
-
     wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
     buttonSizer->Add(okButton, 0, wxALL, 5);
     buttonSizer->Add(cancelButton, 0, wxALL, 5);
@@ -239,7 +228,6 @@ void MainFrame::onResize(wxCommandEvent& event)
     mainSizer->Fit(&dialog);
     
     // عرض مربع الحوار
-
     if (dialog.ShowModal() == wxID_OK) {
         // تغيير حجم الصورة
         m_imageProcessor->resize(widthCtrl->GetValue(), heightCtrl->GetValue());
@@ -275,8 +263,8 @@ void MainFrame::onOilPainting(wxCommandEvent& event)
     dynRatioSlider->Bind(wxEVT_SLIDER, [dynRatioSlider, dynRatioText](wxCommandEvent&) {
         dynRatioText->SetLabel(wxString::Format("%d", dynRatioSlider->GetValue()));
     });
-
-
+    
+    // إنشاء السايزر
     wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
     buttonSizer->Add(okButton, 0, wxALL, 5);
     buttonSizer->Add(cancelButton, 0, wxALL, 5);
@@ -294,8 +282,8 @@ void MainFrame::onOilPainting(wxCommandEvent& event)
     // تعيين السايزر
     dialog.SetSizer(mainSizer);
     mainSizer->Fit(&dialog);
-
-
+    
+    // عرض مربع الحوار
     if (dialog.ShowModal() == wxID_OK) {
         // تطبيق تأثير الرسم الزيتي
         m_imageProcessor->oilPainting(sizeSlider->GetValue(), dynRatioSlider->GetValue());
@@ -315,8 +303,6 @@ void MainFrame::onPencilSketch(wxCommandEvent& event)
     // إنشاء مربع حوار
     wxDialog dialog(this, wxID_ANY, _("Pencil Sketch"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
     
-
-
     // إنشاء عناصر مربع الحوار
     wxCheckBox* colorCheck = new wxCheckBox(&dialog, wxID_ANY, _("Color output"));
     wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
@@ -346,8 +332,6 @@ void MainFrame::onPencilSketch(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
-
-
 void MainFrame::onAutoWhiteBalance(wxCommandEvent& event)
 {
     // التحقق من وجود صورة
@@ -376,7 +360,6 @@ void MainFrame::onAutoContrast(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
-
 void MainFrame::onAutoColorEnhance(wxCommandEvent& event)
 {
     // التحقق من وجود صورة
@@ -390,7 +373,6 @@ void MainFrame::onAutoColorEnhance(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
-
 
 void MainFrame::onReduceNoise(wxCommandEvent& event)
 {
@@ -413,7 +395,6 @@ void MainFrame::onReduceNoise(wxCommandEvent& event)
         strengthText->SetLabel(wxString::Format("%d", strengthSlider->GetValue()));
     });
     
-
     // إنشاء السايزر
     wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
     buttonSizer->Add(okButton, 0, wxALL, 5);
@@ -440,7 +421,6 @@ void MainFrame::onReduceNoise(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
-
 void MainFrame::onAdaptiveSharpen(wxCommandEvent& event)
 {
     // التحقق من وجود صورة
@@ -461,9 +441,8 @@ void MainFrame::onAdaptiveSharpen(wxCommandEvent& event)
     strengthSlider->Bind(wxEVT_SLIDER, [strengthSlider, strengthText](wxCommandEvent&) {
         strengthText->SetLabel(wxString::Format("%d", strengthSlider->GetValue()));
     });
-
-
-
+    
+    // إنشاء السايزر
     wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
     buttonSizer->Add(okButton, 0, wxALL, 5);
     buttonSizer->Add(cancelButton, 0, wxALL, 5);
@@ -489,7 +468,6 @@ void MainFrame::onAdaptiveSharpen(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
-
 void MainFrame::onCropToAspectRatio(wxCommandEvent& event)
 {
     // التحقق من وجود صورة
@@ -505,8 +483,7 @@ void MainFrame::onCropToAspectRatio(wxCommandEvent& event)
     wxSpinCtrl* heightCtrl = new wxSpinCtrl(&dialog, wxID_ANY, "9", wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 9);
     wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
     wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
-
- 
+    
     // إنشاء السايزر
     wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
     buttonSizer->Add(okButton, 0, wxALL, 5);
@@ -540,7 +517,6 @@ void MainFrame::onCropToAspectRatio(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
-
 void MainFrame::onAddBorder(wxCommandEvent& event)
 {
     // التحقق من وجود صورة
@@ -567,8 +543,6 @@ void MainFrame::onAddBorder(wxCommandEvent& event)
     wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
     
     // إنشاء السايزر
-
-    // إنشاء السايزر
     wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
     buttonSizer->Add(okButton, 0, wxALL, 5);
     buttonSizer->Add(cancelButton, 0, wxALL, 5);
@@ -589,8 +563,6 @@ void MainFrame::onAddBorder(wxCommandEvent& event)
     mainSizer->Fit(&dialog);
     
     // عرض مربع الحوار
-
-    // عرض مربع الحوار
     if (dialog.ShowModal() == wxID_OK) {
         // تحويل اللون من wxWidgets إلى OpenCV
         wxColour color = selectedColor;
@@ -603,8 +575,6 @@ void MainFrame::onAddBorder(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
-
-
 
 void MainFrame::onAddVignette(wxCommandEvent& event)
 {
@@ -652,8 +622,6 @@ void MainFrame::onAddVignette(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
-
-
 
 void MainFrame::onAddWatermark(wxCommandEvent& event)
 {
@@ -735,3 +703,90 @@ void MainFrame::onAddWatermark(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
+
+void MainFrame::onAddText(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Add Text"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxTextCtrl* textCtrl = new wxTextCtrl(&dialog, wxID_ANY, _("Sample Text"), wxDefaultPosition, wxSize(300, -1));
+    wxSpinCtrl* xCtrl = new wxSpinCtrl(&dialog, wxID_ANY, "10", wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, m_imageProcessor->getWidth(), 10);
+    wxSpinCtrl* yCtrl = new wxSpinCtrl(&dialog, wxID_ANY, "50", wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, m_imageProcessor->getHeight(), 50);
+    wxSlider* scaleSlider = new wxSlider(&dialog, wxID_ANY, 10, 1, 50, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* scaleText = new wxStaticText(&dialog, wxID_ANY, "1.0");
+    wxButton* colorButton = new wxButton(&dialog, wxID_ANY, _("Choose Color..."));
+    wxColour selectedColor = *wxWHITE;
+    colorButton->Bind(wxEVT_BUTTON, [&selectedColor, &dialog](wxCommandEvent&) {
+        wxColourData data;
+        data.SetColour(selectedColor);
+        wxColourDialog dlg(&dialog, &data);
+        if (dlg.ShowModal() == wxID_OK) {
+            selectedColor = dlg.GetColourData().GetColour();
+        }
+    });
+    wxSpinCtrl* thicknessCtrl = new wxSpinCtrl(&dialog, wxID_ANY, "1", wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 10, 1);
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // ربط حدث تغيير المنزلق
+    scaleSlider->Bind(wxEVT_SLIDER, [scaleSlider, scaleText](wxCommandEvent&) {
+        scaleText->SetLabel(wxString::Format("%.1f", scaleSlider->GetValue() / 10.0));
+    });
+    
+    // إنشاء السايزر
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
+    wxFlexGridSizer* gridSizer = new wxFlexGridSizer(6, 2, 5, 5);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Text:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(textCtrl, 0, wxEXPAND);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Position X:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(xCtrl, 0, wxEXPAND);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Position Y:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(yCtrl, 0, wxEXPAND);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Scale:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(scaleSlider, 0, wxEXPAND);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, ""), 0);
+    gridSizer->Add(scaleText, 0);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Color:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(colorButton, 0, wxEXPAND);
+    gridSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Thickness:")), 0, wxALIGN_CENTER_VERTICAL);
+    gridSizer->Add(thicknessCtrl, 0, wxEXPAND);
+    
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(gridSizer, 0, wxEXPAND | wxALL, 10);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
+    if (dialog.ShowModal() == wxID_OK) {
+        // تحويل اللون من wxWidgets إلى OpenCV
+        wxColour color = selectedColor;
+        cv::Scalar cvColor(color.Blue(), color.Green(), color.Red());
+        
+        // تطبيق إضافة النص
+        m_imageProcessor->addText(textCtrl->GetValue().ToStdString(), 
+                                xCtrl->GetValue(), 
+                                yCtrl->GetValue(), 
+                                scaleSlider->GetValue() / 10.0, 
+                                cvColor, 
+                                thicknessCtrl->GetValue());
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
+
+} // namespace ui
+} // namespace pme
