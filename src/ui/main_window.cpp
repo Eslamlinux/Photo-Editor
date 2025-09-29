@@ -476,3 +476,13 @@ void MainWindow::onUndo(wxCommandEvent& event) {
         updateTitle();
     }
 }
+
+void MainWindow::onRedo(wxCommandEvent& event) {
+    if (m_imageProcessor->redoOperation()) {
+        m_canvasPanel->updateCanvas();
+        m_statusBar->setStatusText(_("Redo"));
+        m_hasUnsavedChanges = true;
+        updateTitle();
+    }
+}
+
