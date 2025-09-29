@@ -586,3 +586,10 @@ bool MainWindow::confirmDiscardChanges() {
     }
 }
 
+
+void MainWindow::saveCurrentProject() {
+    if (m_currentProjectId <= 0) {
+        // No current project
+        return;
+    }
+    
