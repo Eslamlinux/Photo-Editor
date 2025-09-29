@@ -347,3 +347,17 @@ void MainFrame::onPencilSketch(wxCommandEvent& event)
 }
 
 
+
+void MainFrame::onAutoWhiteBalance(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق توازن اللون الأبيض التلقائي
+    m_imageProcessor->autoWhiteBalance();
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
