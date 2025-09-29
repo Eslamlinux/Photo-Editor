@@ -91,7 +91,7 @@ void MainWindow::createMenuBar() {
     viewMenu->AppendCheckItem(ID_SHOW_TOOLS, _("Show &Tools Panel"));
     viewMenu->AppendCheckItem(ID_SHOW_LAYERS, _("Show &Layers Panel"));
     viewMenu->AppendCheckItem(ID_SHOW_PROPERTIES, _("Show &Properties Panel"));
-
+    
     // Image menu
     wxMenu* imageMenu = new wxMenu();
     imageMenu->Append(ID_CROP, _("&Crop"));
@@ -103,22 +103,20 @@ void MainWindow::createMenuBar() {
     imageMenu->Append(ID_ADJUST_SATURATION, _("Adjust &Saturation..."));
     imageMenu->AppendSeparator();
     imageMenu->Append(ID_REMOVE_BACKGROUND, _("Remove &Background"));
-
+    
     // Help menu
     wxMenu* helpMenu = new wxMenu();
     helpMenu->Append(wxID_HELP, _("&Help Contents\tF1"));
     helpMenu->Append(wxID_ABOUT, _("&About PhotoMagicEditor"));
-
+    
     // Add menus to menu bar
     menuBar->Append(fileMenu, _("&File"));
     menuBar->Append(editMenu, _("&Edit"));
     menuBar->Append(viewMenu, _("&View"));
     menuBar->Append(imageMenu, _("&Image"));
     menuBar->Append(helpMenu, _("&Help"));
-
-
-
-  // Set menu bar
+    
+    // Set menu bar
     SetMenuBar(menuBar);
     
     // Bind menu events
@@ -126,6 +124,7 @@ void MainWindow::createMenuBar() {
     Bind(wxEVT_MENU, &MainWindow::onOpen, this, wxID_OPEN);
       this, wxID_NEW);
     Bind(wxEVT_MENU, &MainWindow::onOpen, this, wxID_OPEN);
+    
     Bind(wxEVT_MENU, &MainWindow::onSave, this, wxID_SAVE);
     Bind(wxEVT_MENU, &MainWindow::onSaveAs, this, wxID_SAVEAS);
     Bind(wxEVT_MENU, &MainWindow::onImportImage, this, ID_IMPORT_IMAGE);
@@ -163,7 +162,7 @@ void MainWindow::createStatusBar() {
     SetStatusBar(m_statusBar);
 }
 
-oid MainWindow::createPanels() {
+void MainWindow::createPanels() {
     // Create canvas panel (central area)
     m_canvasPanel = new CanvasPanel(this, m_imageProcessor.get());
     
@@ -175,7 +174,8 @@ oid MainWindow::createPanels() {
     
     // Create layers panel
     m_layersPanel = new LayersPanel(this);
-   // Create properties panel
+    
+    // Create properties panel
     m_propertiesPanel = new PropertiesPanel(this);
     
     // Add panels to AUI manager
@@ -193,8 +193,7 @@ oid MainWindow::createPanels() {
         .BestSize(wxSize(200, 600))
         .CloseButton(true)
         .MaximizeButton(false));
-
-  
+    
     m_auiManager.AddPane(m_projectBrowser, wxAuiPaneInfo()
         .Name("projects")
         .Caption(_("Projects"))
@@ -210,8 +209,7 @@ oid MainWindow::createPanels() {
         .BestSize(wxSize(200, 300))
         .CloseButton(true)
         .MaximizeButton(false));
-
-  
+    
     m_auiManager.AddPane(m_propertiesPanel, wxAuiPaneInfo()
         .Name("properties")
         .Caption(_("Properties"))
@@ -227,8 +225,7 @@ void MainWindow::applyTheme() {
     
     SetBackgroundColour(bgColor);
     SetForegroundColour(fgColor);
-
- 
+    
     // Update menu checkmark
     wxMenuBar* menuBar = GetMenuBar();
     if (menuBar) {
@@ -251,9 +248,7 @@ void MainWindow::onNew(wxCommandEvent& event) {
     if (hasUnsavedChanges() && !confirmDiscardChanges()) {
         return;
     }
-
-
- 
+    
     // Create new project dialog
     NewProjectDialog dialog(this);
     if (dialog.ShowModal() == wxID_OK) {
@@ -268,21 +263,7 @@ void MainWindow::onNew(wxCommandEvent& event) {
         project.width = width;
         project.height = height;
         
-  // Create new project dialog
-    NewProjectDialog dialog(this);
-    if (dialog.ShowModal() == wxID_OK) {
-        // Get project settings
-        int width = dialog.GetWidth();
-        int height = dialog.GetHeight();
-        wxString name = dialog.GetProjectName();
-        
-        // Create new project
-        core::db::Project project;
-        project.name = name.ToStdString();
-        project.width = width;
-        project.height = height;
-        
-  int projectId = m_projectRepository->createProject(project);
+        int projectId = m_projectRepository->createProject(project);
         if (projectId > 0) {
             // Create blank image
             cv::Mat blankImage(height, width, CV_8UC3, cv::Scalar(255, 255, 255));
@@ -307,8 +288,7 @@ void MainWindow::onOpen(wxCommandEvent& event) {
     if (hasUnsavedChanges() && !confirmDiscardChanges()) {
         return;
     }
-
- 
+    
     // Show project browser in open mode
     m_projectBrowser->showOpenDialog();
 }
@@ -320,7 +300,6 @@ void MainWindow::onSave(wxCommandEvent& event) {
         return;
     }
     
- 
     // Save current project
     saveCurrentProject();
 }
@@ -334,7 +313,7 @@ void MainWindow::onSaveAs(wxCommandEvent& event) {
         this
     );
     
- if (!name.IsEmpty()) {
+    if (!name.IsEmpty()) {
         // Create new project with current image
         core::db::Project project;
         project.name = name.ToStdString();
@@ -343,22 +322,21 @@ void MainWindow::onSaveAs(wxCommandEvent& event) {
         project.width = imageSize.width;
         project.height = imageSize.height;
         
- // Create thumbnail
+        // Create thumbnail
         cv::Mat thumbnail;
         cv::resize(m_imageProcessor->getImage(), thumbnail, cv::Size(200, 200 * imageSize.height / imageSize.width));
         std::vector<uchar> thumbnailData;
         cv::imencode(".jpg", thumbnail, thumbnailData);
         project.thumbnail = thumbnailData;
         
-    int projectId = m_projectRepository->createProject(project);
+        int projectId = m_projectRepository->createProject(project);
         if (projectId > 0) {
             // Update current project info
             m_currentProjectId = projectId;
             m_currentProjectName = name;
             m_hasUnsavedChanges = false;
             updateTitle();
-  
-           
+            
             // Save all layers
             saveCurrentProject();
             
@@ -366,6 +344,7 @@ void MainWindow::onSaveAs(wxCommandEvent& event) {
         }
     }
 }
+
 void MainWindow::onImportImage(wxCommandEvent& event) {
     wxFileDialog openDialog(
         this, 
@@ -375,7 +354,7 @@ void MainWindow::onImportImage(wxCommandEvent& event) {
         _("Image files (*.jpg;*.jpeg;*.png;*.webp)|*.jpg;*.jpeg;*.png;*.webp|All files (*.*)|*.*"),
         wxFD_OPEN | wxFD_FILE_MUST_EXIST
     );
-
+    
     if (openDialog.ShowModal() == wxID_OK) {
         wxString path = openDialog.GetPath();
         
@@ -400,8 +379,7 @@ void MainWindow::onImportImage(wxCommandEvent& event) {
             // Mark as unsaved changes
             m_hasUnsavedChanges = true;
             updateTitle();
-
-       } else {
+        } else {
             wxMessageBox(_("Failed to load image."), _("Error"), wxICON_ERROR | wxOK, this);
         }
     }
@@ -421,8 +399,7 @@ void MainWindow::onExportImage(wxCommandEvent& event) {
         _("JPEG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|WebP files (*.webp)|*.webp"),
         wxFD_SAVE | wxFD_OVERWRITE_PROMPT
     );
-
-  
+    
     if (saveDialog.ShowModal() == wxID_OK) {
         wxString path = saveDialog.GetPath();
         
@@ -442,7 +419,8 @@ void MainWindow::onExportImage(wxCommandEvent& event) {
             format = "jpg";
             path += ".jpg";
         }
-      // Save image using OpenCV
+        
+        // Save image using OpenCV
         if (m_imageProcessor->saveImage(path.ToStdString(), format)) {
             m_statusBar->setStatusText(wxString::Format(_("Image exported to: %s"), fileName.GetFullName()));
         } else {
@@ -486,17 +464,18 @@ void MainWindow::onRedo(wxCommandEvent& event) {
     }
 }
 
-
 void MainWindow::onToggleDarkMode(wxCommandEvent& event) {
     m_darkMode = !m_darkMode;
     applyTheme();
 }
+
 void MainWindow::onRemoveBackground(wxCommandEvent& event) {
     if (m_imageProcessor->getImage().empty()) {
         wxMessageBox(_("No image loaded."), _("Error"), wxICON_ERROR | wxOK, this);
         return;
     }
-   // Show progress dialog
+    
+    // Show progress dialog
     wxProgressDialog progressDialog(
         _("Removing Background"),
         _("Processing image with AI model..."),
@@ -516,8 +495,6 @@ void MainWindow::onRemoveBackground(wxCommandEvent& event) {
             // Update UI in main thread
             wxTheApp->CallAfter([this, success, &progressDialog]() {
                 progressDialog.Update(100);
-                
-  
                 
                 if (success) {
                     m_canvasPanel->updateCanvas();
@@ -540,7 +517,7 @@ void MainWindow::onRemoveBackground(wxCommandEvent& event) {
             });
         }
     });
-   
+    
     // Detach thread to let it run independently
     bgThread.detach();
 }
@@ -556,7 +533,6 @@ void MainWindow::onAbout(wxCommandEvent& event) {
     
     wxAboutBox(info, this);
 }
-
 
 bool MainWindow::hasUnsavedChanges() const {
     return m_hasUnsavedChanges;
@@ -586,14 +562,12 @@ bool MainWindow::confirmDiscardChanges() {
     }
 }
 
-
 void MainWindow::saveCurrentProject() {
     if (m_currentProjectId <= 0) {
         // No current project
         return;
     }
     
- 
     // Get current project
     auto projectOpt = m_projectRepository->getProject(m_currentProjectId);
     if (!projectOpt) {
@@ -601,7 +575,7 @@ void MainWindow::saveCurrentProject() {
         return;
     }
     
-core::db::Project project = *projectOpt;
+    core::db::Project project = *projectOpt;
     
     // Update project data
     cv::Size imageSize = m_imageProcessor->getImageSize();
@@ -614,8 +588,7 @@ core::db::Project project = *projectOpt;
     std::vector<uchar> thumbnailData;
     cv::imencode(".jpg", thumbnail, thumbnailData);
     project.thumbnail = thumbnailData;
-
- 
+    
     // Update project in database
     if (m_projectRepository->updateProject(project)) {
         // Save current image as main layer
@@ -642,7 +615,6 @@ core::db::Project project = *projectOpt;
         wxMessageBox(_("Failed to save project."), _("Error"), wxICON_ERROR | wxOK, this);
     }
 }
-
 
 void MainWindow::updateTitle() {
     wxString title = "PhotoMagicEditor";
