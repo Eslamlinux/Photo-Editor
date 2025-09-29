@@ -442,3 +442,12 @@ void MainWindow::onExportImage(wxCommandEvent& event) {
             format = "jpg";
             path += ".jpg";
         }
+      // Save image using OpenCV
+        if (m_imageProcessor->saveImage(path.ToStdString(), format)) {
+            m_statusBar->setStatusText(wxString::Format(_("Image exported to: %s"), fileName.GetFullName()));
+        } else {
+            wxMessageBox(_("Failed to export image."), _("Error"), wxICON_ERROR | wxOK, this);
+        }
+    }
+}
+
