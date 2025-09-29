@@ -109,3 +109,9 @@ wxMenu* adjustMenu = new wxMenu();
     toolsMenu->Append(wxID_NEW + 111, _("Add &Watermark..."));
     toolsMenu->Append(wxID_NEW + 112, _("Add &Text..."));
     m_menuBar->Append(toolsMenu, _("&Tools"));
+ 
+    // إنشاء قائمة المساعدة
+    wxMenu* helpMenu = new wxMenu();
+    helpMenu->Append(wxID_ABOUT, _("&About..."));
+    m_menuBar->Append(helpMenu, _("&Help"));
+  
