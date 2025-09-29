@@ -491,3 +491,8 @@ void MainWindow::onToggleDarkMode(wxCommandEvent& event) {
     m_darkMode = !m_darkMode;
     applyTheme();
 }
+void MainWindow::onRemoveBackground(wxCommandEvent& event) {
+    if (m_imageProcessor->getImage().empty()) {
+        wxMessageBox(_("No image loaded."), _("Error"), wxICON_ERROR | wxOK, this);
+        return;
+    }
