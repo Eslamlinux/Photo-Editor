@@ -643,3 +643,20 @@ core::db::Project project = *projectOpt;
     }
 }
 
+
+void MainWindow::updateTitle() {
+    wxString title = "PhotoMagicEditor";
+    
+    if (!m_currentProjectName.IsEmpty()) {
+        title += wxString::Format(" - %s", m_currentProjectName);
+        
+        if (m_hasUnsavedChanges) {
+            title += " *";
+        }
+    }
+    
+    SetTitle(title);
+}
+
+} // namespace ui
+} // namespace pme
