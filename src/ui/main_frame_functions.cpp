@@ -158,3 +158,18 @@ void MainFrame::onBrightness(wxCommandEvent& event) {
     mainSizer->Fit(&dialog);
     
     // عرض مربع الحوار
+    if (dialog.ShowModal() == wxID_OK) {
+        // تطبيق السطوع
+        m_imageProcessor->adjustBrightness(slider->GetValue());
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
+
+void MainFrame::onResize(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
