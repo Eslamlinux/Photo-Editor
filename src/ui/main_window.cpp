@@ -334,3 +334,12 @@ void MainWindow::onSaveAs(wxCommandEvent& event) {
         this
     );
     
+ if (!name.IsEmpty()) {
+        // Create new project with current image
+        core::db::Project project;
+        project.name = name.ToStdString();
+        
+        cv::Size imageSize = m_imageProcessor->getImageSize();
+        project.width = imageSize.width;
+        project.height = imageSize.height;
+        
