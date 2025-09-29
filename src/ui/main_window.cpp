@@ -557,3 +557,32 @@ void MainWindow::onAbout(wxCommandEvent& event) {
     wxAboutBox(info, this);
 }
 
+
+bool MainWindow::hasUnsavedChanges() const {
+    return m_hasUnsavedChanges;
+}
+
+bool MainWindow::confirmDiscardChanges() {
+    wxMessageDialog dialog(
+        this,
+        _("You have unsaved changes. Do you want to save them?"),
+        _("Unsaved Changes"),
+        wxYES_NO | wxCANCEL | wxICON_QUESTION
+    );
+    
+    int result = dialog.ShowModal();
+    
+    if (result == wxID_YES) {
+        // Save changes
+        wxCommandEvent dummyEvent;
+        onSave(dummyEvent);
+        return !m_hasUnsavedChanges; // Return true if save was successful
+    } else if (result == wxID_NO) {
+        // Discard changes
+        return true;
+    } else {
+        // Cancel
+        return false;
+    }
+}
+
