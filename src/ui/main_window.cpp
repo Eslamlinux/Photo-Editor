@@ -350,3 +350,11 @@ void MainWindow::onSaveAs(wxCommandEvent& event) {
         cv::imencode(".jpg", thumbnail, thumbnailData);
         project.thumbnail = thumbnailData;
         
+    int projectId = m_projectRepository->createProject(project);
+        if (projectId > 0) {
+            // Update current project info
+            m_currentProjectId = projectId;
+            m_currentProjectName = name;
+            m_hasUnsavedChanges = false;
+            updateTitle();
+  
