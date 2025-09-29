@@ -88,3 +88,15 @@ wxMenu* adjustMenu = new wxMenu();
     adjustMenu->Append(wxID_NEW + 107, _("Adaptive &Sharpen"));
     m_menuBar->Append(adjustMenu, _("&Adjust"));
     
+
+    // إنشاء قائمة العرض
+    wxMenu* viewMenu = new wxMenu();
+    viewMenu->Append(ID_ZOOM_IN, _("Zoom &In\t+"));
+    viewMenu->Append(ID_ZOOM_OUT, _("Zoom &Out\t-"));
+    viewMenu->Append(ID_ZOOM_FIT, _("Zoom to &Fit\tF"));
+    viewMenu->Append(ID_ZOOM_RESET, _("Zoom &Reset\t0"));
+    viewMenu->AppendSeparator();
+    viewMenu->Append(ID_TOGGLE_GRID, _("Show &Grid\tG"));
+    viewMenu->Append(ID_TOGGLE_INFO, _("Show &Info\tI"));
+    m_menuBar->Append(viewMenu, _("&View"));
+    
