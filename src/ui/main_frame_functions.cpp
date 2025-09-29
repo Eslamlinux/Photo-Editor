@@ -315,3 +315,35 @@ void MainFrame::onPencilSketch(wxCommandEvent& event)
     // إنشاء مربع حوار
     wxDialog dialog(this, wxID_ANY, _("Pencil Sketch"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
     
+
+
+    // إنشاء عناصر مربع الحوار
+    wxCheckBox* colorCheck = new wxCheckBox(&dialog, wxID_ANY, _("Color output"));
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // إنشاء السايزر
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(colorCheck, 0, wxEXPAND | wxALL, 10);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
+    if (dialog.ShowModal() == wxID_OK) {
+        // تطبيق تأثير الرسم بالقلم الرصاص
+        m_imageProcessor->pencilSketch(colorCheck->IsChecked());
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
+
+
