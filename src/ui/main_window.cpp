@@ -518,3 +518,25 @@ void MainWindow::onRemoveBackground(wxCommandEvent& event) {
                 progressDialog.Update(100);
                 
   
+                
+                if (success) {
+                    m_canvasPanel->updateCanvas();
+                    m_statusBar->setStatusText(_("Background removed"));
+                    m_hasUnsavedChanges = true;
+                    updateTitle();
+                } else {
+                    wxMessageBox(_("Failed to remove background."), _("Error"), wxICON_ERROR | wxOK, this);
+                }
+            });
+        } catch (const std::exception& e) {
+            wxTheApp->CallAfter([this, e, &progressDialog]() {
+                progressDialog.Update(100);
+                wxMessageBox(
+                    wxString::Format(_("Error: %s"), e.what()),
+                    _("Background Removal Failed"),
+                    wxICON_ERROR | wxOK,
+                    this
+                );
+            });
+        }
+    });
