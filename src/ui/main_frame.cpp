@@ -310,3 +310,47 @@ void MainFrame::onSave(wxCommandEvent& event)
     }
 }
 
+
+void MainFrame::onSaveAs(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار حفظ الملف
+    wxFileDialog saveFileDialog(this, _("Save Image"), "", "", 
+                              "PNG files (*.png)|*.png|JPEG files (*.jpg)|*.jpg|BMP files (*.bmp)|*.bmp|TIFF files (*.tiff)|*.tiff", 
+                              wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    
+    // تعيين الامتداد الافتراضي
+    saveFileDialog.SetFilterIndex(0);
+    
+    // عرض مربع حوار حفظ الملف
+    if (saveFileDialog.ShowModal() == wxID_CANCEL) {
+        return;
+    }
+    
+    // الحصول على مسار الملف
+    wxString filePath = saveFileDialog.GetPath();
+    
+    // التحقق من امتداد الملف
+    wxFileName fileName(filePath);
+    if (!fileName.HasExt()) {
+        // إضافة الامتداد الافتراضي
+        switch (saveFileDialog.GetFilterIndex()) {
+            case 0:
+                filePath << ".png";
+                break;
+            case 1:
+                filePath << ".jpg";
+                break;
+            case 2:
+                filePath << ".bmp";
+                break;
+            case 3:
+                filePath << ".tiff";
+                break;
+        }
+    }
+    
