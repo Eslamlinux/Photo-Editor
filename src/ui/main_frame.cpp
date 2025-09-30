@@ -409,3 +409,30 @@ void MainFrame::onClose(wxCloseEvent& event)
     Destroy();
 }
 
+
+void MainFrame::onUndo(wxCommandEvent& event)
+{
+    // التراجع عن آخر عملية
+    m_imageProcessor->undo();
+}
+
+void MainFrame::onRedo(wxCommandEvent& event)
+{
+    // إعادة آخر عملية
+    m_imageProcessor->redo();
+}
+
+void MainFrame::onAbout(wxCommandEvent& event)
+{
+    // إنشاء مربع حوار حول
+    wxAboutDialogInfo info;
+    info.SetName(_("Photo Editor"));
+    info.SetVersion(_("1.0"));
+    info.SetDescription(_("A simple photo editor application."));
+    info.SetCopyright(_("(C) 2023"));
+    info.SetWebSite(_("https://www.example.com"));
+    info.AddDeveloper(_("Developer Name"));
+    
+    // عرض مربع حوار حول
+    wxAboutBox(info);
+}
