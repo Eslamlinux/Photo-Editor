@@ -86,3 +86,19 @@ MainFrame::MainFrame(const wxString& title)
     SetIcon(wxArtProvider::GetIcon(wxART_FRAME_ICON));
     
     // إنشاء شريط القوائم
+   createMenuBar();
+    
+    // إنشاء شريط الأدوات
+    createToolBar();
+    
+    // إنشاء شريط الحالة
+    m_statusBar = CreateStatusBar();
+    m_statusBar->SetStatusText(_("Ready"));
+    
+    // إنشاء لوحة الرسم
+    m_canvasPanel = new CanvasPanel(this, m_imageProcessor);
+    
+    // إنشاء أداة القص
+    m_cropTool = new CropTool(this, m_canvasPanel);
+    
+    // إنشاء تخطيط الإطار
