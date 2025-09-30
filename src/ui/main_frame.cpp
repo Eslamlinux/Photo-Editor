@@ -77,3 +77,12 @@ EVT_MENU(wxID_NEW + 100, MainFrame::onResize)
     EVT_MENU(wxID_NEW + 111, MainFrame::onAddWatermark)
     EVT_MENU(wxID_NEW + 112, MainFrame::onAddText)
 END_EVENT_TABLE()
+MainFrame::MainFrame(const wxString& title)
+    : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(1024, 768)),
+      m_imageProcessor(new core::ImageProcessor()),
+      m_isModified(false)
+{
+    // تعيين أيقونة الإطار
+    SetIcon(wxArtProvider::GetIcon(wxART_FRAME_ICON));
+    
+    // إنشاء شريط القوائم
