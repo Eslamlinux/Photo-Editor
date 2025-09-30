@@ -1047,3 +1047,14 @@ void MainFrame::onZoomIn(wxCommandEvent& event)
     // تكبير الصورة
     m_canvasPanel->zoomIn();
 }
+
+void MainFrame::onZoomOut(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تصغير الصورة
+    m_canvasPanel->zoomOut();
+}
