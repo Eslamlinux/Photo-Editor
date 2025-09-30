@@ -526,3 +526,14 @@ void MainFrame::onSepia(wxCommandEvent& event)
     // تطبيق تأثير السيبيا
     m_imageProcessor->sepia();
 }
+
+void MainFrame::onNegative(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق تأثير السلبي
+    m_imageProcessor->negative();
+}
