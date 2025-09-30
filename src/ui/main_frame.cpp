@@ -1025,3 +1025,14 @@ void MainFrame::onShadowsHighlights(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
+
+void MainFrame::onReset(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إعادة تعيين الصورة
+    m_imageProcessor->reset();
+}
