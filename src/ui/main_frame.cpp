@@ -372,3 +372,40 @@ void MainFrame::onSaveAs(wxCommandEvent& event)
         wxMessageBox(_("Failed to save image file."), _("Error"), wxICON_ERROR | wxOK);
     }
 }
+
+void MainFrame::onExit(wxCommandEvent& event)
+{
+    // إغلاق الإطار
+    Close();
+}
+
+void MainFrame::onClose(wxCloseEvent& event)
+{
+    // التحقق من وجود تعديلات غير محفوظة
+    if (m_isModified) {
+        // سؤال المستخدم عن حفظ التغييرات
+        wxMessageDialog dialog(this, _("Do you want to save changes?"), _("Save Changes"), wxYES_NO | wxCANCEL | wxICON_QUESTION);
+        int result = dialog.ShowModal();
+        
+        if (result == wxID_YES) {
+            // حفظ التغييرات
+            wxCommandEvent saveEvent(wxEVT_COMMAND_MENU_SELECTED, wxID_SAVE);
+            ProcessEvent(saveEvent);
+            
+            // التحقق من نجاح الحفظ
+            if (m_isModified && !event.CanVeto()) {
+                // إلغاء الإغلاق
+                event.Veto();
+                return;
+            }
+        } else if (result == wxID_CANCEL && event.CanVeto()) {
+            // إلغاء الإغلاق
+            event.Veto();
+            return;
+        }
+    }
+    
+    // تدمير الإطار
+    Destroy();
+}
+
