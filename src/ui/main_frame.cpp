@@ -459,3 +459,15 @@ void MainFrame::onRotate90CW(wxCommandEvent& event)
     m_imageProcessor->rotate90CW();
 }
 
+
+void MainFrame::onRotate90CCW(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تدوير الصورة 90 درجة عكس اتجاه عقارب الساعة
+    m_imageProcessor->rotate90CCW();
+}
+
