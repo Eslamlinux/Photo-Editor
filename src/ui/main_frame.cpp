@@ -205,3 +205,16 @@ void MainFrame::updateMenuItems()
     m_menuBar->Enable(ID_TOGGLE_GRID, hasImage);
     m_menuBar->Enable(ID_TOGGLE_INFO, hasImage);
     
+
+    // تحديث عناصر شريط الأدوات
+    m_toolBar->EnableTool(wxID_SAVE, hasImage && m_isModified);
+    m_toolBar->EnableTool(wxID_UNDO, hasImage && m_imageProcessor->canUndo());
+    m_toolBar->EnableTool(wxID_REDO, hasImage && m_imageProcessor->canRedo());
+    m_toolBar->EnableTool(ID_CROP, hasImage);
+    m_toolBar->EnableTool(ID_ROTATE_90_CW, hasImage);
+    m_toolBar->EnableTool(ID_ROTATE_90_CCW, hasImage);
+    m_toolBar->EnableTool(ID_ZOOM_IN, hasImage);
+    m_toolBar->EnableTool(ID_ZOOM_OUT, hasImage);
+    m_toolBar->EnableTool(ID_ZOOM_FIT, hasImage);
+    m_toolBar->EnableTool(ID_ZOOM_RESET, hasImage);
+}
