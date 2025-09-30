@@ -122,3 +122,18 @@ MainFrame::MainFrame(const wxString& title)
     });
     
     // تحديث عناصر القائمة
+
+    updateMenuItems();
+    
+    // تحديث العنوان
+    updateTitle();
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
+
+MainFrame::~MainFrame()
+{
+    // تنظيف الموارد
+    delete m_imageProcessor;
+}
