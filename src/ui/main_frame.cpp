@@ -606,3 +606,14 @@ void MainFrame::onEdgeDetection(wxCommandEvent& event)
     // تطبيق تأثير كشف الحواف
     m_imageProcessor->edgeDetection();
 }
+
+void MainFrame::onEmboss(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق تأثير النقش
+    m_imageProcessor->emboss();
+}
