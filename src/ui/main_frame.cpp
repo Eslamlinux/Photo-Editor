@@ -617,3 +617,14 @@ void MainFrame::onEmboss(wxCommandEvent& event)
     // تطبيق تأثير النقش
     m_imageProcessor->emboss();
 }
+
+void MainFrame::onCartoon(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق تأثير الكرتون
+    m_imageProcessor->cartoon();
+}
