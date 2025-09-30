@@ -969,3 +969,59 @@ void MainFrame::onTemperature(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
+
+void MainFrame::onShadowsHighlights(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Shadows/Highlights"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSlider* shadowsSlider = new wxSlider(&dialog, wxID_ANY, 0, -100, 100, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* shadowsText = new wxStaticText(&dialog, wxID_ANY, "0");
+    wxSlider* highlightsSlider = new wxSlider(&dialog, wxID_ANY, 0, -100, 100, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* highlightsText = new wxStaticText(&dialog, wxID_ANY, "0");
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // ربط حدث تغيير المنزلق
+    shadowsSlider->Bind(wxEVT_SLIDER, [shadowsSlider, shadowsText](wxCommandEvent&) {
+        shadowsText->SetLabel(wxString::Format("%d", shadowsSlider->GetValue()));
+    });
+    
+    highlightsSlider->Bind(wxEVT_SLIDER, [highlightsSlider, highlightsText](wxCommandEvent&) {
+        highlightsText->SetLabel(wxString::Format("%d", highlightsSlider->GetValue()));
+    });
+    
+    // إنشاء السايزر
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Adjust shadows:")), 0, wxALL, 5);
+    mainSizer->Add(shadowsSlider, 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(shadowsText, 0, wxALIGN_CENTER | wxALL, 5);
+    mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Adjust highlights:")), 0, wxALL, 5);
+    mainSizer->Add(highlightsSlider, 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(highlightsText, 0, wxALIGN_CENTER | wxALL, 5);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
+    if (dialog.ShowModal() == wxID_OK) {
+        // تطبيق الظلال/الإضاءات
+        m_imageProcessor->adjustShadowsHighlights(shadowsSlider->GetValue(), highlightsSlider->GetValue());
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
