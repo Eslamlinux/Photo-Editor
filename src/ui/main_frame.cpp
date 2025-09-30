@@ -283,3 +283,30 @@ void MainFrame::onOpen(wxCommandEvent& event)
     }
 }
 
+
+void MainFrame::onSave(wxCommandEvent& event)
+{
+    // التحقق من وجود مسار ملف
+    if (m_currentFilePath.empty()) {
+        // استدعاء حدث الحفظ باسم
+        wxCommandEvent saveAsEvent(wxEVT_COMMAND_MENU_SELECTED, wxID_SAVEAS);
+        ProcessEvent(saveAsEvent);
+        return;
+    }
+    
+    // حفظ الصورة
+    if (m_imageProcessor->saveImage(m_currentFilePath.ToStdString())) {
+        // إعادة تعيين حالة التعديل
+        m_isModified = false;
+        
+        // تحديث عناصر القائمة
+        updateMenuItems();
+        
+        // تحديث العنوان
+        updateTitle();
+    } else {
+        // عرض رسالة خطأ
+        wxMessageBox(_("Failed to save image file."), _("Error"), wxICON_ERROR | wxOK);
+    }
+}
+
