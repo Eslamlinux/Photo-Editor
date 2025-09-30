@@ -628,3 +628,14 @@ void MainFrame::onCartoon(wxCommandEvent& event)
     // تطبيق تأثير الكرتون
     m_imageProcessor->cartoon();
 }
+
+void MainFrame::onWatercolor(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق تأثير الألوان المائية
+    m_imageProcessor->watercolor();
+}
