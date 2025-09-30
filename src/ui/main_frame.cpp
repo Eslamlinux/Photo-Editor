@@ -922,3 +922,50 @@ void MainFrame::onGamma(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
+
+void MainFrame::onTemperature(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // إنشاء مربع حوار
+    wxDialog dialog(this, wxID_ANY, _("Temperature"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
+    
+    // إنشاء عناصر مربع الحوار
+    wxSlider* slider = new wxSlider(&dialog, wxID_ANY, 0, -100, 100, wxDefaultPosition, wxSize(300, -1));
+    wxStaticText* valueText = new wxStaticText(&dialog, wxID_ANY, "0");
+    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
+    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
+    
+    // ربط حدث تغيير المنزلق
+    slider->Bind(wxEVT_SLIDER, [slider, valueText](wxCommandEvent&) {
+        valueText->SetLabel(wxString::Format("%d", slider->GetValue()));
+    });
+    
+    // إنشاء السايزر
+    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+    buttonSizer->Add(okButton, 0, wxALL, 5);
+    buttonSizer->Add(cancelButton, 0, wxALL, 5);
+    
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Adjust temperature:")), 0, wxALL, 5);
+    mainSizer->Add(slider, 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(valueText, 0, wxALIGN_CENTER | wxALL, 5);
+    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
+    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
+    
+    // تعيين السايزر
+    dialog.SetSizer(mainSizer);
+    mainSizer->Fit(&dialog);
+    
+    // عرض مربع الحوار
+    if (dialog.ShowModal() == wxID_OK) {
+        // تطبيق درجة الحرارة
+        m_imageProcessor->adjustTemperature(slider->GetValue());
+    }
+    
+    // تعيين التركيز على لوحة الرسم
+    m_canvasPanel->SetFocus();
+}
