@@ -239,3 +239,47 @@ void MainFrame::updateTitle()
     SetTitle(title);
 }
 
+
+void MainFrame::onOpen(wxCommandEvent& event)
+{
+    // التحقق من وجود تعديلات غير محفوظة
+    if (m_isModified) {
+        // سؤال المستخدم عن حفظ التغييرات
+        wxMessageDialog dialog(this, _("Do you want to save changes?"), _("Save Changes"), wxYES_NO | wxCANCEL | wxICON_QUESTION);
+        int result = dialog.ShowModal();
+        
+        if (result == wxID_YES) {
+            // حفظ التغييرات
+            wxCommandEvent saveEvent(wxEVT_COMMAND_MENU_SELECTED, wxID_SAVE);
+            ProcessEvent(saveEvent);
+            
+            // التحقق من نجاح الحفظ
+            if (m_isModified) {
+                return;
+            }
+        } else if (result == wxID_CANCEL) {
+            // إلغاء العملية
+            return;
+        }
+    }
+    
+    // إنشاء مربع حوار اختيار الملف
+    wxFileDialog openFileDialog(this, _("Open Image"), "", "", 
+                              "Image files (*.png;*.jpg;*.jpeg;*.bmp;*.tiff)|*.png;*.jpg;*.jpeg;*.bmp;*.tiff", 
+                              wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    
+    // عرض مربع حوار اختيار الملف
+    if (openFileDialog.ShowModal() == wxID_CANCEL) {
+        return;
+    }
+    
+    // الحصول على مسار الملف
+    wxString filePath = openFileDialog.GetPath();
+    
+    // فتح الملف
+    if (!OpenFile(filePath)) {
+        // عرض رسالة خطأ
+        wxMessageBox(_("Failed to open image file."), _("Error"), wxICON_ERROR | wxOK);
+    }
+}
+
