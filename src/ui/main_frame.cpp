@@ -471,3 +471,14 @@ void MainFrame::onRotate90CCW(wxCommandEvent& event)
     m_imageProcessor->rotate90CCW();
 }
 
+
+void MainFrame::onRotate180(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تدوير الصورة 180 درجة
+    m_imageProcessor->rotate180();
+}
