@@ -51,3 +51,16 @@ enum {
     ID_LANGUAGE_ENGLISH,
     ID_LANGUAGE_ARABIC
 };
+class MainFrame : public wxFrame {
+public:
+    MainFrame(const wxString& title);
+    virtual ~MainFrame();
+    
+    bool OpenFile(const wxString& filePath);
+    
+private:
+    void createMenuBar();
+    void createToolBar();
+    void updateMenuItems();
+    void updateTitle();
+    
