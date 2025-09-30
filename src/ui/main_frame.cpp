@@ -44,7 +44,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(ID_SHARPEN, MainFrame::onSharpen)
     EVT_MENU(ID_EDGE_DETECTION, MainFrame::onEdgeDetection)
     EVT_MENU(ID_EMBOSS, MainFrame::onEmboss)
- EVT_MENU(ID_CARTOON, MainFrame::onCartoon)
+    EVT_MENU(ID_CARTOON, MainFrame::onCartoon)
     EVT_MENU(ID_WATERCOLOR, MainFrame::onWatercolor)
     EVT_MENU(ID_MOSAIC, MainFrame::onMosaic)
     EVT_MENU(ID_BRIGHTNESS, MainFrame::onBrightness)
@@ -63,7 +63,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(ID_TOGGLE_INFO, MainFrame::onToggleInfo)
     EVT_MENU(ID_LANGUAGE_ENGLISH, MainFrame::onLanguageEnglish)
     EVT_MENU(ID_LANGUAGE_ARABIC, MainFrame::onLanguageArabic)
-EVT_MENU(wxID_NEW + 100, MainFrame::onResize)
+    EVT_MENU(wxID_NEW + 100, MainFrame::onResize)
     EVT_MENU(wxID_NEW + 101, MainFrame::onOilPainting)
     EVT_MENU(wxID_NEW + 102, MainFrame::onPencilSketch)
     EVT_MENU(wxID_NEW + 103, MainFrame::onAutoWhiteBalance)
@@ -77,6 +77,7 @@ EVT_MENU(wxID_NEW + 100, MainFrame::onResize)
     EVT_MENU(wxID_NEW + 111, MainFrame::onAddWatermark)
     EVT_MENU(wxID_NEW + 112, MainFrame::onAddText)
 END_EVENT_TABLE()
+
 MainFrame::MainFrame(const wxString& title)
     : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(1024, 768)),
       m_imageProcessor(new core::ImageProcessor()),
@@ -86,7 +87,7 @@ MainFrame::MainFrame(const wxString& title)
     SetIcon(wxArtProvider::GetIcon(wxART_FRAME_ICON));
     
     // إنشاء شريط القوائم
-   createMenuBar();
+    createMenuBar();
     
     // إنشاء شريط الأدوات
     createToolBar();
@@ -102,7 +103,7 @@ MainFrame::MainFrame(const wxString& title)
     m_cropTool = new CropTool(this, m_canvasPanel);
     
     // إنشاء تخطيط الإطار
-  wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(m_canvasPanel, 1, wxEXPAND);
     SetSizer(sizer);
     
@@ -122,7 +123,6 @@ MainFrame::MainFrame(const wxString& title)
     });
     
     // تحديث عناصر القائمة
-
     updateMenuItems();
     
     // تحديث العنوان
@@ -162,7 +162,6 @@ bool MainFrame::OpenFile(const wxString& filePath)
     
     return false;
 }
-
 
 void MainFrame::updateMenuItems()
 {
@@ -205,7 +204,6 @@ void MainFrame::updateMenuItems()
     m_menuBar->Enable(ID_TOGGLE_GRID, hasImage);
     m_menuBar->Enable(ID_TOGGLE_INFO, hasImage);
     
-
     // تحديث عناصر شريط الأدوات
     m_toolBar->EnableTool(wxID_SAVE, hasImage && m_isModified);
     m_toolBar->EnableTool(wxID_UNDO, hasImage && m_imageProcessor->canUndo());
@@ -238,7 +236,6 @@ void MainFrame::updateTitle()
     // تعيين العنوان
     SetTitle(title);
 }
-
 
 void MainFrame::onOpen(wxCommandEvent& event)
 {
@@ -283,7 +280,6 @@ void MainFrame::onOpen(wxCommandEvent& event)
     }
 }
 
-
 void MainFrame::onSave(wxCommandEvent& event)
 {
     // التحقق من وجود مسار ملف
@@ -309,7 +305,6 @@ void MainFrame::onSave(wxCommandEvent& event)
         wxMessageBox(_("Failed to save image file."), _("Error"), wxICON_ERROR | wxOK);
     }
 }
-
 
 void MainFrame::onSaveAs(wxCommandEvent& event)
 {
@@ -354,7 +349,7 @@ void MainFrame::onSaveAs(wxCommandEvent& event)
         }
     }
     
-
+    // حفظ الصورة
     if (m_imageProcessor->saveImage(filePath.ToStdString())) {
         // تعيين مسار الملف الحالي
         m_currentFilePath = filePath;
@@ -409,7 +404,6 @@ void MainFrame::onClose(wxCloseEvent& event)
     Destroy();
 }
 
-
 void MainFrame::onUndo(wxCommandEvent& event)
 {
     // التراجع عن آخر عملية
@@ -459,7 +453,6 @@ void MainFrame::onRotate90CW(wxCommandEvent& event)
     m_imageProcessor->rotate90CW();
 }
 
-
 void MainFrame::onRotate90CCW(wxCommandEvent& event)
 {
     // التحقق من وجود صورة
@@ -470,7 +463,6 @@ void MainFrame::onRotate90CCW(wxCommandEvent& event)
     // تدوير الصورة 90 درجة عكس اتجاه عقارب الساعة
     m_imageProcessor->rotate90CCW();
 }
-
 
 void MainFrame::onRotate180(wxCommandEvent& event)
 {
@@ -734,53 +726,6 @@ void MainFrame::onContrast(wxCommandEvent& event)
     m_canvasPanel->SetFocus();
 }
 
-void MainFrame::onContrast(wxCommandEvent& event)
-{
-    // التحقق من وجود صورة
-    if (!m_imageProcessor->hasImage()) {
-        return;
-    }
-    
-    // إنشاء مربع حوار
-    wxDialog dialog(this, wxID_ANY, _("Contrast"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
-    
-    // إنشاء عناصر مربع الحوار
-    wxSlider* slider = new wxSlider(&dialog, wxID_ANY, 0, -100, 100, wxDefaultPosition, wxSize(300, -1));
-    wxStaticText* valueText = new wxStaticText(&dialog, wxID_ANY, "0");
-    wxButton* okButton = new wxButton(&dialog, wxID_OK, _("OK"));
-    wxButton* cancelButton = new wxButton(&dialog, wxID_CANCEL, _("Cancel"));
-    
-    // ربط حدث تغيير المنزلق
-    slider->Bind(wxEVT_SLIDER, [slider, valueText](wxCommandEvent&) {
-        valueText->SetLabel(wxString::Format("%d", slider->GetValue()));
-    });
-    
-    // إنشاء السايزر
-    wxBoxSizer* buttonSizer = new wxBoxSizer(wxHORIZONTAL);
-    buttonSizer->Add(okButton, 0, wxALL, 5);
-    buttonSizer->Add(cancelButton, 0, wxALL, 5);
-    
-    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-    mainSizer->Add(new wxStaticText(&dialog, wxID_ANY, _("Adjust contrast:")), 0, wxALL, 5);
-    mainSizer->Add(slider, 0, wxEXPAND | wxALL, 5);
-    mainSizer->Add(valueText, 0, wxALIGN_CENTER | wxALL, 5);
-    mainSizer->Add(new wxStaticLine(&dialog, wxID_ANY), 0, wxEXPAND | wxALL, 5);
-    mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER | wxALL, 5);
-    
-    // تعيين السايزر
-    dialog.SetSizer(mainSizer);
-    mainSizer->Fit(&dialog);
-    
-    // عرض مربع الحوار
-    if (dialog.ShowModal() == wxID_OK) {
-        // تطبيق التباين
-        m_imageProcessor->adjustContrast(slider->GetValue());
-    }
-    
-    // تعيين التركيز على لوحة الرسم
-    m_canvasPanel->SetFocus();
-}
-
 void MainFrame::onSaturation(wxCommandEvent& event)
 {
     // التحقق من وجود صورة
@@ -921,7 +866,6 @@ void MainFrame::onGamma(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
-
 
 void MainFrame::onTemperature(wxCommandEvent& event)
 {
@@ -1081,7 +1025,6 @@ void MainFrame::onZoomReset(wxCommandEvent& event)
     m_canvasPanel->zoomReset();
 }
 
-
 void MainFrame::onToggleGrid(wxCommandEvent& event)
 {
     // التحقق من وجود صورة
@@ -1103,3 +1046,30 @@ void MainFrame::onToggleInfo(wxCommandEvent& event)
     // تبديل عرض المعلومات
     m_canvasPanel->toggleInfo();
 }
+
+void MainFrame::onLanguageEnglish(wxCommandEvent& event)
+{
+    // تغيير اللغة إلى الإنجليزية
+    // (سيتم تنفيذها لاحقًا)
+}
+
+void MainFrame::onLanguageArabic(wxCommandEvent& event)
+{
+    // تغيير اللغة إلى العربية
+    // (سيتم تنفيذها لاحقًا)
+}
+
+void MainFrame::onToolApply(wxCommandEvent& event)
+{
+    // تطبيق الأداة الحالية
+    // (سيتم تنفيذها لاحقًا)
+}
+
+void MainFrame::onToolCancel(wxCommandEvent& event)
+{
+    // إلغاء الأداة الحالية
+    // (سيتم تنفيذها لاحقًا)
+}
+
+} // namespace ui
+} // namespace pme
