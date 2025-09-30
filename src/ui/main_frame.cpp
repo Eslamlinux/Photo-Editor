@@ -584,3 +584,14 @@ void MainFrame::onBlur(wxCommandEvent& event)
     // تعيين التركيز على لوحة الرسم
     m_canvasPanel->SetFocus();
 }
+
+void MainFrame::onSharpen(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق تأثير التحديد
+    m_imageProcessor->sharpen();
+}
