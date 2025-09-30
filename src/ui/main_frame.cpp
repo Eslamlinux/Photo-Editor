@@ -218,3 +218,24 @@ void MainFrame::updateMenuItems()
     m_toolBar->EnableTool(ID_ZOOM_FIT, hasImage);
     m_toolBar->EnableTool(ID_ZOOM_RESET, hasImage);
 }
+
+void MainFrame::updateTitle()
+{
+    // إنشاء العنوان
+    wxString title = "Photo Editor";
+    
+    // إضافة اسم الملف إذا كان موجودًا
+    if (!m_currentFilePath.empty()) {
+        wxFileName fileName(m_currentFilePath);
+        title << " - " << fileName.GetFullName();
+        
+        // إضافة علامة التعديل
+        if (m_isModified) {
+            title << " *";
+        }
+    }
+    
+    // تعيين العنوان
+    SetTitle(title);
+}
+
