@@ -595,3 +595,14 @@ void MainFrame::onSharpen(wxCommandEvent& event)
     // تطبيق تأثير التحديد
     m_imageProcessor->sharpen();
 }
+
+void MainFrame::onEdgeDetection(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق تأثير كشف الحواف
+    m_imageProcessor->edgeDetection();
+}
