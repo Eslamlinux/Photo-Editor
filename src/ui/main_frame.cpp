@@ -482,3 +482,14 @@ void MainFrame::onRotate180(wxCommandEvent& event)
     // تدوير الصورة 180 درجة
     m_imageProcessor->rotate180();
 }
+
+void MainFrame::onFlipHorizontal(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // قلب الصورة أفقيًا
+    m_imageProcessor->flipHorizontal();
+}
