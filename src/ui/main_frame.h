@@ -15,8 +15,10 @@ class ImageProcessor;
 
 namespace ui {
 
-#endif // PME_UI_MAIN_FRAME_H
+class CanvasPanel;
+class CropTool;
 
+// معرفات القوائم
 enum {
     ID_CROP = wxID_HIGHEST + 1,
     ID_ROTATE_90_CW,
@@ -51,6 +53,7 @@ enum {
     ID_LANGUAGE_ENGLISH,
     ID_LANGUAGE_ARABIC
 };
+
 class MainFrame : public wxFrame {
 public:
     MainFrame(const wxString& title);
@@ -64,6 +67,7 @@ private:
     void updateMenuItems();
     void updateTitle();
     
+    // معالجات الأحداث
     void onOpen(wxCommandEvent& event);
     void onSave(wxCommandEvent& event);
     void onSaveAs(wxCommandEvent& event);
@@ -120,7 +124,6 @@ private:
     void onAddWatermark(wxCommandEvent& event);
     void onAddText(wxCommandEvent& event);
     
-
     core::ImageProcessor* m_imageProcessor;
     CanvasPanel* m_canvasPanel;
     CropTool* m_cropTool;
