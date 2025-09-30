@@ -354,3 +354,21 @@ void MainFrame::onSaveAs(wxCommandEvent& event)
         }
     }
     
+
+    if (m_imageProcessor->saveImage(filePath.ToStdString())) {
+        // تعيين مسار الملف الحالي
+        m_currentFilePath = filePath;
+        
+        // إعادة تعيين حالة التعديل
+        m_isModified = false;
+        
+        // تحديث عناصر القائمة
+        updateMenuItems();
+        
+        // تحديث العنوان
+        updateTitle();
+    } else {
+        // عرض رسالة خطأ
+        wxMessageBox(_("Failed to save image file."), _("Error"), wxICON_ERROR | wxOK);
+    }
+}
