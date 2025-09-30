@@ -515,3 +515,14 @@ void MainFrame::onGrayscale(wxCommandEvent& event)
     // تحويل الصورة إلى تدرج الرمادي
     m_imageProcessor->grayscale();
 }
+
+void MainFrame::onSepia(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تطبيق تأثير السيبيا
+    m_imageProcessor->sepia();
+}
