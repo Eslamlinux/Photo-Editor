@@ -1036,3 +1036,14 @@ void MainFrame::onReset(wxCommandEvent& event)
     // إعادة تعيين الصورة
     m_imageProcessor->reset();
 }
+
+void MainFrame::onZoomIn(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تكبير الصورة
+    m_canvasPanel->zoomIn();
+}
