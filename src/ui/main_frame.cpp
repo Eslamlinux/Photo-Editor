@@ -436,3 +436,26 @@ void MainFrame::onAbout(wxCommandEvent& event)
     // عرض مربع حوار حول
     wxAboutBox(info);
 }
+
+void MainFrame::onCrop(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تنشيط أداة القص
+    m_cropTool->activate();
+}
+
+void MainFrame::onRotate90CW(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تدوير الصورة 90 درجة في اتجاه عقارب الساعة
+    m_imageProcessor->rotate90CW();
+}
+
