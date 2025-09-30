@@ -137,3 +137,29 @@ MainFrame::~MainFrame()
     // تنظيف الموارد
     delete m_imageProcessor;
 }
+
+bool MainFrame::OpenFile(const wxString& filePath)
+{
+    // محاولة تحميل الصورة
+    if (m_imageProcessor->loadImage(filePath.ToStdString())) {
+        // تعيين مسار الملف الحالي
+        m_currentFilePath = filePath;
+        
+        // إعادة تعيين حالة التعديل
+        m_isModified = false;
+        
+        // تحديث عناصر القائمة
+        updateMenuItems();
+        
+        // تحديث العنوان
+        updateTitle();
+        
+        // تعيين التركيز على لوحة الرسم
+        m_canvasPanel->SetFocus();
+        
+        return true;
+    }
+    
+    return false;
+}
+
