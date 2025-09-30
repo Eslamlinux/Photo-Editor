@@ -493,3 +493,14 @@ void MainFrame::onFlipHorizontal(wxCommandEvent& event)
     // قلب الصورة أفقيًا
     m_imageProcessor->flipHorizontal();
 }
+
+void MainFrame::onFlipVertical(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // قلب الصورة رأسيًا
+    m_imageProcessor->flipVertical();
+}
