@@ -102,3 +102,23 @@ MainFrame::MainFrame(const wxString& title)
     m_cropTool = new CropTool(this, m_canvasPanel);
     
     // إنشاء تخطيط الإطار
+  wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(m_canvasPanel, 1, wxEXPAND);
+    SetSizer(sizer);
+    
+    // تعيين وظيفة التحديث
+    m_imageProcessor->setUpdateCallback([this]() {
+        // تحديث الإطار
+        m_canvasPanel->Refresh();
+        
+        // تعيين حالة التعديل
+        m_isModified = true;
+        
+        // تحديث عناصر القائمة
+        updateMenuItems();
+        
+        // تحديث العنوان
+        updateTitle();
+    });
+    
+    // تحديث عناصر القائمة
