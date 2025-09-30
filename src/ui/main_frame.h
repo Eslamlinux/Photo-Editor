@@ -120,3 +120,20 @@ private:
     void onAddWatermark(wxCommandEvent& event);
     void onAddText(wxCommandEvent& event);
     
+
+    core::ImageProcessor* m_imageProcessor;
+    CanvasPanel* m_canvasPanel;
+    CropTool* m_cropTool;
+    wxString m_currentFilePath;
+    bool m_isModified;
+    wxMenuBar* m_menuBar;
+    wxToolBar* m_toolBar;
+    wxStatusBar* m_statusBar;
+    
+    DECLARE_EVENT_TABLE()
+};
+
+} // namespace ui
+} // namespace pme
+
+#endif // PME_UI_MAIN_FRAME_H
