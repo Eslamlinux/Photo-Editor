@@ -1081,3 +1081,25 @@ void MainFrame::onZoomReset(wxCommandEvent& event)
     m_canvasPanel->zoomReset();
 }
 
+
+void MainFrame::onToggleGrid(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تبديل عرض الشبكة
+    m_canvasPanel->toggleGrid();
+}
+
+void MainFrame::onToggleInfo(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تبديل عرض المعلومات
+    m_canvasPanel->toggleInfo();
+}
