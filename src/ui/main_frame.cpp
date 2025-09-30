@@ -163,3 +163,45 @@ bool MainFrame::OpenFile(const wxString& filePath)
     return false;
 }
 
+
+void MainFrame::updateMenuItems()
+{
+    // التحقق من وجود صورة
+    bool hasImage = m_imageProcessor->hasImage();
+    
+    // تحديث عناصر القائمة
+    m_menuBar->Enable(wxID_SAVE, hasImage && m_isModified);
+    m_menuBar->Enable(wxID_SAVEAS, hasImage);
+    m_menuBar->Enable(wxID_UNDO, hasImage && m_imageProcessor->canUndo());
+    m_menuBar->Enable(wxID_REDO, hasImage && m_imageProcessor->canRedo());
+    m_menuBar->Enable(ID_CROP, hasImage);
+    m_menuBar->Enable(ID_ROTATE_90_CW, hasImage);
+    m_menuBar->Enable(ID_ROTATE_90_CCW, hasImage);
+    m_menuBar->Enable(ID_ROTATE_180, hasImage);
+    m_menuBar->Enable(ID_FLIP_HORIZONTAL, hasImage);
+    m_menuBar->Enable(ID_FLIP_VERTICAL, hasImage);
+    m_menuBar->Enable(ID_GRAYSCALE, hasImage);
+    m_menuBar->Enable(ID_SEPIA, hasImage);
+    m_menuBar->Enable(ID_NEGATIVE, hasImage);
+    m_menuBar->Enable(ID_BLUR, hasImage);
+    m_menuBar->Enable(ID_SHARPEN, hasImage);
+    m_menuBar->Enable(ID_EDGE_DETECTION, hasImage);
+    m_menuBar->Enable(ID_EMBOSS, hasImage);
+    m_menuBar->Enable(ID_CARTOON, hasImage);
+    m_menuBar->Enable(ID_WATERCOLOR, hasImage);
+    m_menuBar->Enable(ID_MOSAIC, hasImage);
+    m_menuBar->Enable(ID_BRIGHTNESS, hasImage);
+    m_menuBar->Enable(ID_CONTRAST, hasImage);
+    m_menuBar->Enable(ID_SATURATION, hasImage);
+    m_menuBar->Enable(ID_HUE, hasImage);
+    m_menuBar->Enable(ID_GAMMA, hasImage);
+    m_menuBar->Enable(ID_TEMPERATURE, hasImage);
+    m_menuBar->Enable(ID_SHADOWS_HIGHLIGHTS, hasImage);
+    m_menuBar->Enable(ID_RESET, hasImage);
+    m_menuBar->Enable(ID_ZOOM_IN, hasImage);
+    m_menuBar->Enable(ID_ZOOM_OUT, hasImage);
+    m_menuBar->Enable(ID_ZOOM_FIT, hasImage);
+    m_menuBar->Enable(ID_ZOOM_RESET, hasImage);
+    m_menuBar->Enable(ID_TOGGLE_GRID, hasImage);
+    m_menuBar->Enable(ID_TOGGLE_INFO, hasImage);
+    
