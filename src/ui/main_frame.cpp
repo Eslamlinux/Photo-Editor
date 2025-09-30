@@ -504,3 +504,14 @@ void MainFrame::onFlipVertical(wxCommandEvent& event)
     // قلب الصورة رأسيًا
     m_imageProcessor->flipVertical();
 }
+
+void MainFrame::onGrayscale(wxCommandEvent& event)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تحويل الصورة إلى تدرج الرمادي
+    m_imageProcessor->grayscale();
+}
