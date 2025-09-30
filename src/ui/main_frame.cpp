@@ -1,0 +1,20 @@
+#include "main_frame.h"
+#include "canvas_panel.h"
+#include "crop_tool.h"
+#include "../core/image_processor.h"
+
+#include <wx/filedlg.h>
+#include <wx/msgdlg.h>
+#include <wx/dcclient.h>
+#include <wx/artprov.h>
+#include <wx/aboutdlg.h>
+#include <wx/colordlg.h>
+#include <wx/slider.h>
+#include <wx/stattext.h>
+#include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/dialog.h>
+#include <wx/spinctrl.h>
+#include <wx/checkbox.h>
+#include <wx/statline.h>
+#include <wx/filename.h>
