@@ -120,3 +120,25 @@ void ImageProcessor::saveState()
     }
 }
 
+void ImageProcessor::clearRedoStack()
+{
+    m_redoStack.clear();
+}
+
+void ImageProcessor::notifyUpdate()
+{
+    if (m_updateCallback) {
+        m_updateCallback();
+    }
+}
+
+bool ImageProcessor::hasImage() const
+{
+    return !m_image.empty();
+}
+
+cv::Mat ImageProcessor::getImage() const
+{
+    return m_image;
+}
+
