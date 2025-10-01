@@ -291,3 +291,29 @@ wxPoint CanvasPanel::getImageOrigin() const
     return origin;
 }
 
+
+wxSize CanvasPanel::getScaledImageSize() const
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor || !m_imageProcessor->hasImage()) {
+        return wxSize(0, 0);
+    }
+    
+    // حساب حجم الصورة المقياسة
+    int width = static_cast<int>(m_imageProcessor->getWidth() * m_zoomFactor);
+    int height = static_cast<int>(m_imageProcessor->getHeight() * m_zoomFactor);
+    
+    return wxSize(width, height);
+}
+
+wxRect CanvasPanel::getImageRect() const
+{
+    // الحصول على موضع الصورة
+    wxPoint origin = getImageOrigin();
+    
+    // الحصول على حجم الصورة المقياسة
+    wxSize scaledSize = getScaledImageSize();
+    
+    return wxRect(origin, scaledSize);
+}
+
