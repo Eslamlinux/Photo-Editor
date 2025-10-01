@@ -380,3 +380,21 @@ void CanvasPanel::zoomReset()
     // إعادة رسم اللوحة
     Refresh();
 }
+
+void CanvasPanel::toggleGrid()
+{
+    // تبديل حالة رؤية الشبكة
+    m_isGridVisible = !m_isGridVisible;
+    
+    // إعادة رسم اللوحة
+    Refresh();
+}
+
+void CanvasPanel::toggleInfo()
+{
+    // تبديل حالة رؤية المعلومات
+    m_isInfoVisible = !m_isInfoVisible;
+    
+    // إعادة رسم اللوحة
+    Refresh();
+}
