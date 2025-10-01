@@ -121,3 +121,11 @@ void CanvasPanel::onMouseDown(wxMouseEvent& event)
     
     event.Skip();
 }
+
+void CanvasPanel::onMouseUp(wxMouseEvent& event)
+{
+    // إلغاء وضع التحريك
+    m_isPanning = false;
+    
+    event.Skip();
+}
