@@ -368,3 +368,15 @@ void CanvasPanel::zoomFit()
     // إعادة رسم اللوحة
     Refresh();
 }
+
+void CanvasPanel::zoomReset()
+{
+    // إعادة تعيين عامل التكبير/التصغير
+    m_zoomFactor = 1.0;
+    
+    // إعادة تعيين إزاحة التحريك
+    m_panOffset = wxPoint(0, 0);
+    
+    // إعادة رسم اللوحة
+    Refresh();
+}
