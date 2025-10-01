@@ -166,3 +166,32 @@ void CanvasPanel::drawImage(wxDC& dc)
         // نسخ بيانات الصورة
         unsigned char* imgData = wxImg.GetData();
         unsigned char* alphaData = wxImg.GetAlpha();
+     for (int y = 0; y < image.rows; y++) {
+            for (int x = 0; x < image.cols; x++) {
+                cv::Vec4b pixel = image.at<cv::Vec4b>(y, x);
+                int index = (y * image.cols + x) * 3;
+                imgData[index] = pixel[2];     // R
+                imgData[index + 1] = pixel[1]; // G
+                imgData[index + 2] = pixel[0]; // B
+                alphaData[y * image.cols + x] = pixel[3]; // Alpha
+            }
+        }
+    } else if (image.channels() == 1) {
+        // صورة رمادية
+        wxImg = wxImage(image.cols, image.rows);
+        
+        // نسخ بيانات الصورة
+        unsigned char* imgData = wxImg.GetData();
+        for (int y = 0; y < image.rows; y++) {
+            for (int x = 0; x < image.cols; x++) {
+                unsigned char pixel = image.at<unsigned char>(y, x);
+                int index = (y * image.cols + x) * 3;
+                imgData[index] = pixel;     // R
+                imgData[index + 1] = pixel; // G
+                imgData[index + 2] = pixel; // B
+            }
+        }
+    } else {
+        // نوع غير مدعوم
+        return;
+    }
