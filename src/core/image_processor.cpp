@@ -188,3 +188,26 @@ bool ImageProcessor::crop(int x, int y, int width, int height)
     return true;
 }
 
+
+bool ImageProcessor::rotate90CW()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تدوير الصورة 90 درجة في اتجاه عقارب الساعة
+    cv::rotate(m_image, m_image, cv::ROTATE_90_CLOCKWISE);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
