@@ -234,3 +234,26 @@ bool ImageProcessor::rotate90CCW()
     return true;
 }
 
+
+bool ImageProcessor::rotate180()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تدوير الصورة 180 درجة
+    cv::rotate(m_image, m_image, cv::ROTATE_180);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
