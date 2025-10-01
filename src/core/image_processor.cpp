@@ -77,3 +77,24 @@ bool ImageProcessor::undo()
     return true;
 }
 
+
+bool ImageProcessor::redo()
+{
+    // التحقق من إمكانية الإعادة
+    if (!canRedo()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    m_undoStack.push_back(m_image.clone());
+    
+    // استعادة الحالة التالية
+    m_image = m_redoStack.back();
+    m_redoStack.pop_back();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
