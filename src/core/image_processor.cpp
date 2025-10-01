@@ -354,3 +354,31 @@ bool ImageProcessor::resize(int width, int height)
     return true;
 }
 
+
+bool ImageProcessor::grayscale()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من أن الصورة ليست بالفعل رمادية
+    if (m_image.channels() == 1) {
+        return true;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تحويل الصورة إلى تدرج الرمادي
+    cv::cvtColor(m_image, m_image, cv::COLOR_BGR2GRAY);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
