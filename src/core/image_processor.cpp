@@ -158,3 +158,33 @@ int ImageProcessor::getChannels() const
     return hasImage() ? m_image.channels() : 0;
 }
 
+
+bool ImageProcessor::crop(int x, int y, int width, int height)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة المنطقة
+    if (x < 0 || y < 0 || width <= 0 || height <= 0 ||
+        x + width > getWidth() || y + height > getHeight()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // قص الصورة
+    cv::Rect roi(x, y, width, height);
+    m_image = m_image(roi).clone();
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
