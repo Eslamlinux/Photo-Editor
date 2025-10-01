@@ -211,3 +211,26 @@ bool ImageProcessor::rotate90CW()
     return true;
 }
 
+
+bool ImageProcessor::rotate90CCW()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تدوير الصورة 90 درجة عكس اتجاه عقارب الساعة
+    cv::rotate(m_image, m_image, cv::ROTATE_90_COUNTERCLOCKWISE);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
