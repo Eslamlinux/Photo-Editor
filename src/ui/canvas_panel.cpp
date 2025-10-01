@@ -86,3 +86,27 @@ void CanvasPanel::onMouseWheel(wxMouseEvent& event)
     // إعادة رسم اللوحة
     Refresh();
 }
+
+void CanvasPanel::onMouseMove(wxMouseEvent& event)
+{
+    // تحديث موضع الماوس الأخير
+    wxPoint mousePos = event.GetPosition();
+    
+    // التحقق من وضع التحريك
+    if (m_isPanning) {
+        // حساب الإزاحة
+        wxPoint delta = mousePos - m_lastMousePos;
+        
+        // تحديث إزاحة التحريك
+        m_panOffset.x += delta.x;
+        m_panOffset.y += delta.y;
+        
+        // إعادة رسم اللوحة
+        Refresh();
+    }
+    
+    // تحديث موضع الماوس الأخير
+    m_lastMousePos = mousePos;
+    
+    event.Skip();
+}
