@@ -195,3 +195,18 @@ void CanvasPanel::drawImage(wxDC& dc)
         // نوع غير مدعوم
         return;
     }
+   
+    // تحويل الصورة إلى bitmap
+    wxBitmap bitmap(wxImg);
+    
+    // حساب حجم الصورة المقياسة
+    wxSize scaledSize = getScaledImageSize();
+    
+    // حساب موضع الصورة
+    wxPoint origin = getImageOrigin();
+    
+    // رسم الصورة
+    dc.SetUserScale(m_zoomFactor, m_zoomFactor);
+    dc.DrawBitmap(bitmap, origin.x / m_zoomFactor, origin.y / m_zoomFactor, true);
+    dc.SetUserScale(1.0, 1.0);
+}
