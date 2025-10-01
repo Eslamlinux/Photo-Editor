@@ -98,3 +98,25 @@ bool ImageProcessor::redo()
     return true;
 }
 
+
+bool ImageProcessor::canUndo() const
+{
+    return !m_undoStack.empty();
+}
+
+bool ImageProcessor::canRedo() const
+{
+    return !m_redoStack.empty();
+}
+
+void ImageProcessor::saveState()
+{
+    // حفظ الحالة الحالية للتراجع
+    m_undoStack.push_back(m_image.clone());
+    
+    // تحديد حجم سجل التراجع (للحد من استخدام الذاكرة)
+    if (m_undoStack.size() > 20) {
+        m_undoStack.erase(m_undoStack.begin());
+    }
+}
+
