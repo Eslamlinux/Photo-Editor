@@ -346,3 +346,25 @@ void CanvasPanel::zoomOut()
     // إعادة رسم اللوحة
     Refresh();
 }
+
+void CanvasPanel::zoomFit()
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor || !m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // حساب عامل التكبير/التصغير المناسب
+    wxSize clientSize = GetClientSize();
+    double zoomX = static_cast<double>(clientSize.GetWidth()) / m_imageProcessor->getWidth();
+    double zoomY = static_cast<double>(clientSize.GetHeight()) / m_imageProcessor->getHeight();
+    
+    // استخدام العامل الأصغر
+    m_zoomFactor = std::min(zoomX, zoomY);
+    
+    // إعادة تعيين إزاحة التحريك
+    m_panOffset = wxPoint(0, 0);
+    
+    // إعادة رسم اللوحة
+    Refresh();
+}
