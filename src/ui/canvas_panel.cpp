@@ -24,3 +24,13 @@ CanvasPanel::CanvasPanel(wxWindow* parent, core::ImageProcessor* imageProcessor)
       m_isGridVisible(false),
       m_isInfoVisible(true),
       m_isPanning(false)
+{
+    // تعيين الخلفية
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
+    SetBackgroundColour(wxColour(240, 240, 240));
+}
+
+CanvasPanel::~CanvasPanel()
+{
+}
+
