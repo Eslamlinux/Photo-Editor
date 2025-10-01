@@ -326,3 +326,31 @@ bool ImageProcessor::flipVertical()
     return true;
 }
 
+
+bool ImageProcessor::resize(int width, int height)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة الأبعاد
+    if (width <= 0 || height <= 0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تغيير حجم الصورة
+    cv::resize(m_image, m_image, cv::Size(width, height), 0, 0, cv::INTER_LANCZOS4);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
