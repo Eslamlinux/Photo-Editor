@@ -257,3 +257,26 @@ bool ImageProcessor::rotate180()
     return true;
 }
 
+
+bool ImageProcessor::flipHorizontal()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // قلب الصورة أفقيًا
+    cv::flip(m_image, m_image, 1);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
