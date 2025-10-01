@@ -332,3 +332,17 @@ void CanvasPanel::zoomIn()
     Refresh();
 }
 
+
+void CanvasPanel::zoomOut()
+{
+    // تقليل عامل التكبير/التصغير
+    m_zoomFactor /= 1.1;
+    
+    // تقييد عامل التكبير/التصغير
+    if (m_zoomFactor < 0.1) {
+        m_zoomFactor = 0.1;
+    }
+    
+    // إعادة رسم اللوحة
+    Refresh();
+}
