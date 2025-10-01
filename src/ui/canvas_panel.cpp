@@ -210,3 +210,29 @@ void CanvasPanel::drawImage(wxDC& dc)
     dc.DrawBitmap(bitmap, origin.x / m_zoomFactor, origin.y / m_zoomFactor, true);
     dc.SetUserScale(1.0, 1.0);
 }
+
+void CanvasPanel::drawGrid(wxDC& dc)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor || !m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // الحصول على مستطيل الصورة
+    wxRect imageRect = getImageRect();
+    
+    // تعيين قلم الشبكة
+    dc.SetPen(wxPen(wxColour(200, 200, 200), 1, wxPENSTYLE_DOT));
+    
+    // رسم الشبكة الأفقية
+    int gridSize = 50;
+    for (int y = imageRect.GetTop(); y <= imageRect.GetBottom(); y += gridSize) {
+        dc.DrawLine(imageRect.GetLeft(), y, imageRect.GetRight(), y);
+    }
+    
+    // رسم الشبكة الرأسية
+    for (int x = imageRect.GetLeft(); x <= imageRect.GetRight(); x += gridSize) {
+        dc.DrawLine(x, imageRect.GetTop(), x, imageRect.GetBottom());
+    }
+}
+
