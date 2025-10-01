@@ -1,0 +1,26 @@
+#include "ui/canvas_panel.h"
+#include "core/image_processor.h"
+
+#include <wx/dcclient.h>
+#include <wx/dcbuffer.h>
+#include <wx/dcmemory.h>
+
+namespace pme {
+namespace ui {
+
+BEGIN_EVENT_TABLE(CanvasPanel, wxPanel)
+    EVT_PAINT(CanvasPanel::onPaint)
+    EVT_SIZE(CanvasPanel::onSize)
+    EVT_MOUSEWHEEL(CanvasPanel::onMouseWheel)
+    EVT_MOTION(CanvasPanel::onMouseMove)
+    EVT_LEFT_DOWN(CanvasPanel::onMouseDown)
+    EVT_LEFT_UP(CanvasPanel::onMouseUp)
+END_EVENT_TABLE()
+
+CanvasPanel::CanvasPanel(wxWindow* parent, core::ImageProcessor* imageProcessor)
+    : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE),
+      m_imageProcessor(imageProcessor),
+      m_zoomFactor(1.0),
+      m_isGridVisible(false),
+      m_isInfoVisible(true),
+      m_isPanning(false)
