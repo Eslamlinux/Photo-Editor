@@ -57,3 +57,9 @@ void CanvasPanel::onPaint(wxPaintEvent& event)
         drawInfo(dc);
     }
 }
+void CanvasPanel::onSize(wxSizeEvent& event)
+{
+    // إعادة رسم اللوحة
+    Refresh();
+    event.Skip();
+}
