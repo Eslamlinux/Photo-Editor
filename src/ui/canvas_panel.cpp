@@ -129,3 +129,40 @@ void CanvasPanel::onMouseUp(wxMouseEvent& event)
     
     event.Skip();
 }
+
+void CanvasPanel::drawImage(wxDC& dc)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor || !m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // الحصول على الصورة
+    cv::Mat image = m_imageProcessor->getImage();
+    
+    // تحويل الصورة من OpenCV إلى wxWidgets
+    wxImage wxImg;
+    
+    // التحقق من نوع الصورة
+    if (image.channels() == 3) {
+        // صورة RGB
+        wxImg = wxImage(image.cols, image.rows);
+        
+        // نسخ بيانات الصورة
+        unsigned char* imgData = wxImg.GetData();
+        for (int y = 0; y < image.rows; y++) {
+            for (int x = 0; x < image.cols; x++) {
+                cv::Vec3b pixel = image.at<cv::Vec3b>(y, x);
+                int index = (y * image.cols + x) * 3;
+                imgData[index] = pixel[2];     // R
+                imgData[index + 1] = pixel[1]; // G
+                imgData[index + 2] = pixel[0]; // B
+            }
+        }
+    } else if (image.channels() == 4) {
+        // صورة RGBA
+        wxImg = wxImage(image.cols, image.rows, true);
+        
+        // نسخ بيانات الصورة
+        unsigned char* imgData = wxImg.GetData();
+        unsigned char* alphaData = wxImg.GetAlpha();
