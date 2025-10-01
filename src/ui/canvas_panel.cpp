@@ -34,7 +34,6 @@ CanvasPanel::~CanvasPanel()
 {
 }
 
-
 void CanvasPanel::onPaint(wxPaintEvent& event)
 {
     // إنشاء سياق الرسم المخزن مؤقتًا
@@ -57,6 +56,7 @@ void CanvasPanel::onPaint(wxPaintEvent& event)
         drawInfo(dc);
     }
 }
+
 void CanvasPanel::onSize(wxSizeEvent& event)
 {
     // إعادة رسم اللوحة
@@ -166,7 +166,7 @@ void CanvasPanel::drawImage(wxDC& dc)
         // نسخ بيانات الصورة
         unsigned char* imgData = wxImg.GetData();
         unsigned char* alphaData = wxImg.GetAlpha();
-     for (int y = 0; y < image.rows; y++) {
+        for (int y = 0; y < image.rows; y++) {
             for (int x = 0; x < image.cols; x++) {
                 cv::Vec4b pixel = image.at<cv::Vec4b>(y, x);
                 int index = (y * image.cols + x) * 3;
@@ -195,7 +195,7 @@ void CanvasPanel::drawImage(wxDC& dc)
         // نوع غير مدعوم
         return;
     }
-   
+    
     // تحويل الصورة إلى bitmap
     wxBitmap bitmap(wxImg);
     
@@ -236,7 +236,6 @@ void CanvasPanel::drawGrid(wxDC& dc)
     }
 }
 
-
 void CanvasPanel::drawInfo(wxDC& dc)
 {
     // التحقق من وجود صورة
@@ -256,7 +255,6 @@ void CanvasPanel::drawInfo(wxDC& dc)
     // رسم النص
     dc.DrawText(info, 10, 10);
 }
-
 
 wxPoint CanvasPanel::getImageOrigin() const
 {
@@ -291,7 +289,6 @@ wxPoint CanvasPanel::getImageOrigin() const
     return origin;
 }
 
-
 wxSize CanvasPanel::getScaledImageSize() const
 {
     // التحقق من وجود صورة
@@ -317,7 +314,6 @@ wxRect CanvasPanel::getImageRect() const
     return wxRect(origin, scaledSize);
 }
 
-
 void CanvasPanel::zoomIn()
 {
     // زيادة عامل التكبير/التصغير
@@ -331,7 +327,6 @@ void CanvasPanel::zoomIn()
     // إعادة رسم اللوحة
     Refresh();
 }
-
 
 void CanvasPanel::zoomOut()
 {
@@ -398,3 +393,21 @@ void CanvasPanel::toggleInfo()
     // إعادة رسم اللوحة
     Refresh();
 }
+
+double CanvasPanel::getZoomFactor() const
+{
+    return m_zoomFactor;
+}
+
+bool CanvasPanel::isGridVisible() const
+{
+    return m_isGridVisible;
+}
+
+bool CanvasPanel::isInfoVisible() const
+{
+    return m_isInfoVisible;
+}
+
+} // namespace ui
+} // namespace pme
