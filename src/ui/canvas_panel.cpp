@@ -110,3 +110,14 @@ void CanvasPanel::onMouseMove(wxMouseEvent& event)
     
     event.Skip();
 }
+
+void CanvasPanel::onMouseDown(wxMouseEvent& event)
+{
+    // تعيين وضع التحريك
+    m_isPanning = true;
+    
+    // تحديث موضع الماوس الأخير
+    m_lastMousePos = event.GetPosition();
+    
+    event.Skip();
+}
