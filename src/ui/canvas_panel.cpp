@@ -236,3 +236,24 @@ void CanvasPanel::drawGrid(wxDC& dc)
     }
 }
 
+
+void CanvasPanel::drawInfo(wxDC& dc)
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor || !m_imageProcessor->hasImage()) {
+        return;
+    }
+    
+    // تعيين الخط
+    dc.SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+    dc.SetTextForeground(wxColour(0, 0, 0));
+    
+    // إنشاء نص المعلومات
+    wxString info;
+    info << "Size: " << m_imageProcessor->getWidth() << " x " << m_imageProcessor->getHeight();
+    info << "  |  Zoom: " << static_cast<int>(m_zoomFactor * 100) << "%";
+    
+    // رسم النص
+    dc.DrawText(info, 10, 10);
+}
+
