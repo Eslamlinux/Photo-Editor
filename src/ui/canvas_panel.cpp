@@ -257,3 +257,37 @@ void CanvasPanel::drawInfo(wxDC& dc)
     dc.DrawText(info, 10, 10);
 }
 
+
+wxPoint CanvasPanel::getImageOrigin() const
+{
+    // التحقق من وجود صورة
+    if (!m_imageProcessor || !m_imageProcessor->hasImage()) {
+        return wxPoint(0, 0);
+    }
+    
+    // حساب حجم الصورة المقياسة
+    wxSize scaledSize = getScaledImageSize();
+    
+    // حساب موضع الصورة
+    wxSize clientSize = GetClientSize();
+    wxPoint origin;
+    
+    if (scaledSize.GetWidth() < clientSize.GetWidth()) {
+        origin.x = (clientSize.GetWidth() - scaledSize.GetWidth()) / 2;
+    } else {
+        origin.x = 0;
+    }
+    
+    if (scaledSize.GetHeight() < clientSize.GetHeight()) {
+        origin.y = (clientSize.GetHeight() - scaledSize.GetHeight()) / 2;
+    } else {
+        origin.y = 0;
+    }
+    
+    // إضافة إزاحة التحريك
+    origin.x += m_panOffset.x;
+    origin.y += m_panOffset.y;
+    
+    return origin;
+}
+
