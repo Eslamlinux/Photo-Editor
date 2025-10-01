@@ -56,3 +56,24 @@ bool ImageProcessor::saveImage(const std::string& filePath)
     return cv::imwrite(filePath, m_image);
 }
 
+
+bool ImageProcessor::undo()
+{
+    // التحقق من إمكانية التراجع
+    if (!canUndo()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للإعادة
+    m_redoStack.push_back(m_image.clone());
+    
+    // استعادة الحالة السابقة
+    m_image = m_undoStack.back();
+    m_undoStack.pop_back();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
