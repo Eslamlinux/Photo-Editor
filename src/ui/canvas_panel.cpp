@@ -63,3 +63,26 @@ void CanvasPanel::onSize(wxSizeEvent& event)
     Refresh();
     event.Skip();
 }
+
+void CanvasPanel::onMouseWheel(wxMouseEvent& event)
+{
+    // تغيير عامل التكبير/التصغير
+    double delta = event.GetWheelRotation() / event.GetWheelDelta();
+    double factor = 1.1;
+    
+    if (delta > 0) {
+        m_zoomFactor *= factor;
+    } else if (delta < 0) {
+        m_zoomFactor /= factor;
+    }
+    
+    // تقييد عامل التكبير/التصغير
+    if (m_zoomFactor < 0.1) {
+        m_zoomFactor = 0.1;
+    } else if (m_zoomFactor > 10.0) {
+        m_zoomFactor = 10.0;
+    }
+    
+    // إعادة رسم اللوحة
+    Refresh();
+}
