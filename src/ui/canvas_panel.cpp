@@ -34,3 +34,26 @@ CanvasPanel::~CanvasPanel()
 {
 }
 
+
+void CanvasPanel::onPaint(wxPaintEvent& event)
+{
+    // إنشاء سياق الرسم المخزن مؤقتًا
+    wxBufferedPaintDC dc(this);
+    
+    // مسح الخلفية
+    dc.SetBackground(wxBrush(GetBackgroundColour()));
+    dc.Clear();
+    
+    // رسم الصورة
+    drawImage(dc);
+    
+    // رسم الشبكة إذا كانت مرئية
+    if (m_isGridVisible) {
+        drawGrid(dc);
+    }
+    
+    // رسم المعلومات إذا كانت مرئية
+    if (m_isInfoVisible) {
+        drawInfo(dc);
+    }
+}
