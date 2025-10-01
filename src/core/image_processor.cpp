@@ -44,3 +44,15 @@ bool ImageProcessor::loadImage(const std::string& filePath)
     
     return true;
 }
+
+bool ImageProcessor::saveImage(const std::string& filePath)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // محاولة حفظ الصورة
+    return cv::imwrite(filePath, m_image);
+}
+
