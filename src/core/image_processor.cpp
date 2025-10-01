@@ -142,3 +142,19 @@ cv::Mat ImageProcessor::getImage() const
     return m_image;
 }
 
+
+int ImageProcessor::getWidth() const
+{
+    return hasImage() ? m_image.cols : 0;
+}
+
+int ImageProcessor::getHeight() const
+{
+    return hasImage() ? m_image.rows : 0;
+}
+
+int ImageProcessor::getChannels() const
+{
+    return hasImage() ? m_image.channels() : 0;
+}
+
