@@ -35,3 +35,27 @@ BackgroundRemover::BackgroundRemover(const std::string& modelPath) : m_initializ
         
         // الحصول على أسماء المدخلات والمخرجات
         m_inputName = m_session->GetInputName(0, *m_allocator);
+ 
+        // الحصول على أبعاد المدخلات والمخرجات
+        Ort::TypeInfo inputTypeInfo = m_session->GetInputTypeInfo(0);
+        auto inputTensorInfo = inputTypeInfo.GetTensorTypeAndShapeInfo();
+        m_inputDims = inputTensorInfo.GetShape();
+        
+        Ort::TypeInfo outputTypeInfo = m_session->GetOutputTypeInfo(0);
+        auto outputTensorInfo = outputTypeInfo.GetTensorTypeAndShapeInfo();
+        m_outputDims = outputTensorInfo.GetShape();
+        
+        m_initialized = true;
+    }
+    catch (const Ort::Exception& e) {
+        std::cerr << "ONNX Runtime error: " << e.what() << std::endl;
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error initializing BackgroundRemover: " << e.what() << std::endl;
+    }
+}
+
+BackgroundRemover::~BackgroundRemover() {
+    // المخصصات ستتم تنظيفها تلقائيًا بواسطة unique_ptr
+}
+
