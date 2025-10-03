@@ -59,3 +59,31 @@ BackgroundRemover::~BackgroundRemover() {
     // المخصصات ستتم تنظيفها تلقائيًا بواسطة unique_ptr
 }
 
+
+cv::Mat BackgroundRemover::removeBg(const cv::Mat& inputImage) {
+    if (!m_initialized) {
+        std::cerr << "BackgroundRemover not initialized properly" << std::endl;
+        return inputImage.clone();
+    }
+    
+    try {
+        // معالجة مسبقة للصورة
+        cv::Mat processedInput;
+        preprocess(inputImage, processedInput);
+        
+        // تحويل البيانات إلى تنسور
+        size_t inputTensorSize = processedInput.total() * processedInput.elemSize();
+        std::vector<float> inputTensorValues(inputTensorSize / sizeof(float));
+        std::memcpy(inputTensorValues.data(), processedInput.data, inputTensorSize);
+        
+        // إنشاء تنسور المدخلات
+        auto inputTensor = Ort::Value::CreateTensor<float>(
+            *m_memoryInfo,
+            inputTensorValues.data(),
+            inputTensorValues.size(),
+            m_inputDims.data(),
+            m_inputDims.size()
+        );
+        
+        // تشغيل النموذج
+
