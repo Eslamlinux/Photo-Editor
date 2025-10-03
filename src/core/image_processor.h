@@ -26,3 +26,28 @@ namespace core {
     bool canUndo() const;
     bool canRedo() const;
 
+ 
+    // عمليات التحويل
+    bool crop(int x, int y, int width, int height);
+    bool rotate90CW();
+    bool rotate90CCW();
+    bool rotate180();
+    bool flipHorizontal();
+    bool flipVertical();
+    bool resize(int width, int height);
+    
+    // عمليات المرشحات
+    bool grayscale();
+    bool sepia();
+    bool negative();
+    bool blur(int radius = 5);
+    bool sharpen();
+    bool edgeDetection();
+    bool emboss();
+    bool cartoon();
+    bool watercolor();
+    bool mosaic(int blockSize = 10);
+    bool oilPainting(int size = 5, int dynRatio = 1);
+    bool pencilSketch(bool colorOutput = false);
+    
+    // عمليات التعديل
