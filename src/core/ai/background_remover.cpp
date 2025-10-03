@@ -120,3 +120,60 @@ cv::Mat BackgroundRemover::removeBg(const cv::Mat& inputImage) {
     }
 }
 
+
+void BackgroundRemover::preprocess(const cv::Mat& input, cv::Mat& output) {
+    // تغيير حجم الصورة إلى الأبعاد المطلوبة للنموذج
+    int targetHeight = m_inputDims[2];
+    int targetWidth = m_inputDims[3];
+    
+    // تحويل الصورة إلى RGB إذا كانت بتنسيق آخر
+    cv::Mat rgbImage;
+    if (input.channels() == 4) {
+        cv::cvtColor(input, rgbImage, cv::COLOR_BGRA2RGB);
+    } else if (input.channels() == 3) {
+        cv::cvtColor(input, rgbImage, cv::COLOR_BGR2RGB);
+    } else if (input.channels() == 1) {
+        cv::cvtColor(input, rgbImage, cv::COLOR_GRAY2RGB);
+    } else {
+        rgbImage = input.clone();
+    }
+    
+    // تغيير حجم الصورة
+    cv::Mat resizedImage;
+    cv::resize(rgbImage, resizedImage, cv::Size(targetWidth, targetHeight));
+    
+    // تطبيع البيانات
+    resizedImage.convertTo(resizedImage, CV_32F, 1.0 / 255.0);
+    
+    // تحويل الصورة إلى تنسور NCHW (Batch, Channels, Height, Width)
+    // تقسيم القنوات
+    std::vector<cv::Mat> channels(3);
+    cv::split(resizedImage, channels);
+    
+    // إنشاء تنسور المخرجات
+    output = cv::Mat(1, 3 * targetHeight * targetWidth, CV_32F);
+    
+    // نسخ البيانات إلى التنسور
+    float* outputData = (float*)output.data;
+    
+    // القناة الأولى (R)
+    for (int h = 0; h < targetHeight; h++) {
+        for (int w = 0; w < targetWidth; w++) {
+            outputData[0 * targetHeight * targetWidth + h * targetWidth + w] = channels[0].at<float>(h, w);
+        }
+    }
+    
+    // القناة الثانية (G)
+    for (int h = 0; h < targetHeight; h++) {
+        for (int w = 0; w < targetWidth; w++) {
+            outputData[1 * targetHeight * targetWidth + h * targetWidth + w] = channels[1].at<float>(h, w);
+        }
+    }
+    
+    // القناة الثالثة (B)
+    for (int h = 0; h < targetHeight; h++) {
+        for (int w = 0; w < targetWidth; w++) {
+            outputData[2 * targetHeight * targetWidth + h * targetWidth + w] = channels[2].at<float>(h, w);
+        }
+    }
+
