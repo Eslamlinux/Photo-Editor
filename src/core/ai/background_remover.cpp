@@ -203,3 +203,31 @@ void BackgroundRemover::postprocess(const Ort::Value& tensor, cv::Mat& mask, con
     // تحويل القناع إلى CV_8U
     mask.convertTo(mask, CV_8U, 255);
 }
+
+void BackgroundRemover::applyMask(const cv::Mat& image, const cv::Mat& mask, cv::Mat& result) {
+    // إنشاء قناة ألفا
+    cv::Mat alpha;
+    if (mask.channels() == 1) {
+        alpha = mask.clone();
+    } else {
+        cv::cvtColor(mask, alpha, cv::COLOR_BGR2GRAY);
+    }
+    
+    // إنشاء صورة BGRA
+    cv::Mat bgra;
+    if (image.channels() == 3) {
+        cv::cvtColor(image, bgra, cv::COLOR_BGR2BGRA);
+    } else if (image.channels() == 1) {
+        cv::cvtColor(image, bgra, cv::COLOR_GRAY2BGRA);
+    } else {
+        bgra = image.clone();
+    }
+    
+    // تطبيق القناع على قناة ألفا
+    std::vector<cv::Mat> channels;
+    cv::split(bgra, channels);
+    channels[3] = alpha;
+    cv::merge(channels, result);
+}
+#endif // !DISABLE_AI_FEATURES
+
