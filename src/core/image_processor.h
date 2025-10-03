@@ -9,8 +9,12 @@
 namespace pme {
 namespace core {
 
-
-#endif // PME_CORE_IMAGE_PROCESSOR_H
+class ImageProcessor {
+public:
+    ImageProcessor();
+    ~ImageProcessor();
+    
+    // نوع وظيفة التحديث
     using UpdateCallback = std::function<void()>;
     
     // تعيين وظيفة التحديث
@@ -25,8 +29,7 @@ namespace core {
     bool redo();
     bool canUndo() const;
     bool canRedo() const;
-
- 
+    
     // عمليات التحويل
     bool crop(int x, int y, int width, int height);
     bool rotate90CW();
@@ -51,7 +54,6 @@ namespace core {
     bool pencilSketch(bool colorOutput = false);
     
     // عمليات التعديل
-
     bool adjustBrightness(int value);
     bool adjustContrast(int value);
     bool adjustSaturation(int value);
@@ -83,3 +85,27 @@ namespace core {
     
 private:
     // الصورة الحالية
+    cv::Mat m_image;
+    cv::Mat m_originalImage;
+    
+    // سجل التراجع/الإعادة
+    std::vector<cv::Mat> m_undoStack;
+    std::vector<cv::Mat> m_redoStack;
+    
+    // وظيفة التحديث
+    UpdateCallback m_updateCallback;
+    
+    // حفظ الحالة الحالية للتراجع
+    void saveState();
+    
+    // مسح سجل الإعادة
+    void clearRedoStack();
+    
+    // استدعاء وظيفة التحديث
+    void notifyUpdate();
+};
+
+} // namespace core
+} // namespace pme
+
+#endif // PME_CORE_IMAGE_PROCESSOR_H
