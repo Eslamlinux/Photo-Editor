@@ -35,7 +35,8 @@ BackgroundRemover::BackgroundRemover(const std::string& modelPath) : m_initializ
         
         // الحصول على أسماء المدخلات والمخرجات
         m_inputName = m_session->GetInputName(0, *m_allocator);
- 
+        m_outputName = m_session->GetOutputName(0, *m_allocator);
+        
         // الحصول على أبعاد المدخلات والمخرجات
         Ort::TypeInfo inputTypeInfo = m_session->GetInputTypeInfo(0);
         auto inputTensorInfo = inputTypeInfo.GetTensorTypeAndShapeInfo();
@@ -58,7 +59,6 @@ BackgroundRemover::BackgroundRemover(const std::string& modelPath) : m_initializ
 BackgroundRemover::~BackgroundRemover() {
     // المخصصات ستتم تنظيفها تلقائيًا بواسطة unique_ptr
 }
-
 
 cv::Mat BackgroundRemover::removeBg(const cv::Mat& inputImage) {
     if (!m_initialized) {
@@ -86,8 +86,6 @@ cv::Mat BackgroundRemover::removeBg(const cv::Mat& inputImage) {
         );
         
         // تشغيل النموذج
-
-
         const char* inputNames[] = {m_inputName.c_str()};
         const char* outputNames[] = {m_outputName.c_str()};
         
@@ -119,7 +117,6 @@ cv::Mat BackgroundRemover::removeBg(const cv::Mat& inputImage) {
         return inputImage.clone();
     }
 }
-
 
 void BackgroundRemover::preprocess(const cv::Mat& input, cv::Mat& output) {
     // تغيير حجم الصورة إلى الأبعاد المطلوبة للنموذج
@@ -176,8 +173,8 @@ void BackgroundRemover::preprocess(const cv::Mat& input, cv::Mat& output) {
             outputData[2 * targetHeight * targetWidth + h * targetWidth + w] = channels[2].at<float>(h, w);
         }
     }
-
-
+    
+    // إعادة تشكيل التنسور إلى NCHW
     output = output.reshape(1, {1, 3, targetHeight, targetWidth});
 }
 
@@ -231,3 +228,30 @@ void BackgroundRemover::applyMask(const cv::Mat& image, const cv::Mat& mask, cv:
 }
 #endif // !DISABLE_AI_FEATURES
 
+cv::Mat removeBackground(const cv::Mat& inputImage, const std::string& modelPath) {
+#ifndef DISABLE_AI_FEATURES
+    static std::string defaultModelPath = "models/u2net.onnx";
+    std::string actualModelPath = modelPath.empty() ? defaultModelPath : modelPath;
+    
+    // التحقق من وجود الملف
+    std::ifstream file(actualModelPath);
+    if (!file.good()) {
+        std::cerr << "Model file not found: " << actualModelPath << std::endl;
+        return inputImage.clone();
+    }
+    
+    // إنشاء مزيل الخلفية
+    BackgroundRemover remover(actualModelPath);
+    
+    // إزالة الخلفية
+    return remover.removeBg(inputImage);
+#else
+    // إذا كانت ميزات الذكاء الاصطناعي معطلة، قم بإرجاع الصورة الأصلية
+    std::cerr << "AI features are disabled. ONNX Runtime is not available." << std::endl;
+    return inputImage.clone();
+#endif
+}
+
+} // namespace ai
+} // namespace core
+} // namespace pme
