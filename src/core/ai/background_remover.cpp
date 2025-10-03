@@ -87,3 +87,36 @@ cv::Mat BackgroundRemover::removeBg(const cv::Mat& inputImage) {
         
         // تشغيل النموذج
 
+
+        const char* inputNames[] = {m_inputName.c_str()};
+        const char* outputNames[] = {m_outputName.c_str()};
+        
+        auto outputTensors = m_session->Run(
+            Ort::RunOptions{nullptr},
+            inputNames,
+            &inputTensor,
+            1,
+            outputNames,
+            1
+        );
+        
+        // معالجة لاحقة للنتيجة
+        cv::Mat mask;
+        postprocess(outputTensors[0], mask, inputImage.size());
+        
+        // تطبيق القناع على الصورة
+        cv::Mat result;
+        applyMask(inputImage, mask, result);
+        
+        return result;
+    }
+    catch (const Ort::Exception& e) {
+        std::cerr << "ONNX Runtime error: " << e.what() << std::endl;
+        return inputImage.clone();
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error in removeBg: " << e.what() << std::endl;
+        return inputImage.clone();
+    }
+}
+
