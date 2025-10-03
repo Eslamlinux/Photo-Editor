@@ -177,3 +177,29 @@ void BackgroundRemover::preprocess(const cv::Mat& input, cv::Mat& output) {
         }
     }
 
+
+    output = output.reshape(1, {1, 3, targetHeight, targetWidth});
+}
+
+void BackgroundRemover::postprocess(const Ort::Value& tensor, cv::Mat& mask, const cv::Size& originalSize) {
+    // الحصول على بيانات التنسور
+    const float* tensorData = tensor.GetTensorData<float>();
+    
+    // الحصول على أبعاد التنسور
+    auto tensorShape = tensor.GetTensorTypeAndShapeInfo().GetShape();
+    int height = tensorShape[2];
+    int width = tensorShape[3];
+    
+    // إنشاء قناع
+    cv::Mat rawMask(height, width, CV_32F, (void*)tensorData);
+    
+    // تطبيق عتبة على القناع
+    cv::Mat thresholdedMask;
+    cv::threshold(rawMask, thresholdedMask, 0.5, 1.0, cv::THRESH_BINARY);
+    
+    // تغيير حجم القناع إلى حجم الصورة الأصلية
+    cv::resize(thresholdedMask, mask, originalSize, 0, 0, cv::INTER_LINEAR);
+    
+    // تحويل القناع إلى CV_8U
+    mask.convertTo(mask, CV_8U, 255);
+}
