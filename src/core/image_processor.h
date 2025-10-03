@@ -51,3 +51,35 @@ namespace core {
     bool pencilSketch(bool colorOutput = false);
     
     // عمليات التعديل
+
+    bool adjustBrightness(int value);
+    bool adjustContrast(int value);
+    bool adjustSaturation(int value);
+    bool adjustHue(int value);
+    bool adjustGamma(double value);
+    bool adjustTemperature(int value);
+    bool adjustShadowsHighlights(int shadows, int highlights);
+    bool autoWhiteBalance();
+    bool autoContrast();
+    bool autoColorEnhance();
+    bool reduceNoise(int strength = 3);
+    bool sharpenAdaptive(int strength = 50);
+    
+    // عمليات أخرى
+    bool reset();
+    bool cropToAspectRatio(double ratio);
+    bool addBorder(int size, const cv::Scalar& color = cv::Scalar(255, 255, 255));
+    bool addVignette(double strength = 0.5);
+    bool addWatermark(const cv::Mat& watermark, double alpha = 0.3, int x = -1, int y = -1);
+    bool addText(const std::string& text, int x, int y, double scale = 1.0, 
+                 const cv::Scalar& color = cv::Scalar(255, 255, 255), int thickness = 1);
+    
+    // الوصول إلى الصورة
+    bool hasImage() const;
+    cv::Mat getImage() const;
+    int getWidth() const;
+    int getHeight() const;
+    int getChannels() const;
+    
+private:
+    // الصورة الحالية
