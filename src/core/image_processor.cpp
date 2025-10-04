@@ -532,3 +532,33 @@ bool ImageProcessor::edgeDetection()
     return true;
 }
 
+
+bool ImageProcessor::emboss()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تأثير النقش
+    cv::Mat kernel = (cv::Mat_<float>(3, 3) <<
+        -2, -1, 0,
+        -1, 1, 1,
+        0, 1, 2);
+    
+    cv::Mat result;
+    cv::filter2D(m_image, result, -1, kernel, cv::Point(-1, -1), 128);
+    m_image = result;
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
