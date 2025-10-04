@@ -149,3 +149,43 @@ public:
             projects.push_back(project);
         }
         
+
+        file.close();
+        
+        return projects;
+    }
+    
+    bool updateProject(int id, const std::string& name, const std::string& path, const std::string& thumbnail_path) {
+        if (!m_initialized) {
+            return false;
+        }
+        
+        // قراءة المشاريع
+        std::vector<Project> projects = getAllProjects();
+        
+        // البحث عن المشروع وتحديثه
+        bool found = false;
+        for (auto& project : projects) {
+            if (project.id == id) {
+                project.name = name;
+                project.path = path;
+                project.thumbnail_path = thumbnail_path;
+                
+                // تحديث وقت التحديث
+                std::time_t now = std::time(nullptr);
+                char timeStr[20];
+                std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
+                project.updated_at = timeStr;
+                
+                found = true;
+                break;
+            }
+        }
+        
+        if (!found) {
+            return false;
+        }
+        
+        // إعادة كتابة الملف
+        std::ofstream file(m_dbPath, std::ios::trunc);
+
