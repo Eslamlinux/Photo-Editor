@@ -1612,3 +1612,65 @@ bool ImageProcessor::addBorder(int size, const cv::Scalar& color)
 
 
 
+
+bool ImageProcessor::addVignette(double strength)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة قوة التأثير
+    if (strength <= 0 || strength > 1.0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // إنشاء قناع التلاشي
+    cv::Mat mask(m_image.size(), CV_8U);
+    
+    // حساب نقطة المركز
+    cv::Point center(m_image.cols / 2, m_image.rows / 2);
+    
+    // حساب نصف القطر الأقصى
+    double maxRadius = std::sqrt(center.x * center.x + center.y * center.y);
+    
+    // إنشاء القناع
+    for (int y = 0; y < m_image.rows; y++) {
+        for (int x = 0; x < m_image.cols; x++) {
+            // حساب المسافة من المركز
+            double distance = std::sqrt((x - center.x) * (x - center.x) + (y - center.y) * (y - center.y));
+            
+            // حساب قيمة القناع
+            double value = 1.0 - strength * (distance / maxRadius);
+            value = std::max(0.0, std::min(1.0, value));
+            
+            // تعيين قيمة القناع
+            mask.at<uchar>(y, x) = static_cast<uchar>(value * 255);
+        }
+    }
+    
+    // تطبيق القناع على الصورة
+    if (m_image.channels() == 1) {
+        m_image = m_image.mul(mask, 1.0 / 255.0);
+    } else {
+        // تحويل القناع إلى ثلاث قنوات
+        cv::Mat maskColor;
+        cv::cvtColor(mask, maskColor, cv::COLOR_GRAY2BGR);
+        
+        // تطبيق القناع على كل قناة
+        m_image = m_image.mul(maskColor, 1.0 / 255.0);
+    }
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
