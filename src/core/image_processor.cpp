@@ -56,7 +56,6 @@ bool ImageProcessor::saveImage(const std::string& filePath)
     return cv::imwrite(filePath, m_image);
 }
 
-
 bool ImageProcessor::undo()
 {
     // التحقق من إمكانية التراجع
@@ -77,7 +76,6 @@ bool ImageProcessor::undo()
     return true;
 }
 
-
 bool ImageProcessor::redo()
 {
     // التحقق من إمكانية الإعادة
@@ -97,7 +95,6 @@ bool ImageProcessor::redo()
     
     return true;
 }
-
 
 bool ImageProcessor::canUndo() const
 {
@@ -142,7 +139,6 @@ cv::Mat ImageProcessor::getImage() const
     return m_image;
 }
 
-
 int ImageProcessor::getWidth() const
 {
     return hasImage() ? m_image.cols : 0;
@@ -157,7 +153,6 @@ int ImageProcessor::getChannels() const
 {
     return hasImage() ? m_image.channels() : 0;
 }
-
 
 bool ImageProcessor::crop(int x, int y, int width, int height)
 {
@@ -188,7 +183,6 @@ bool ImageProcessor::crop(int x, int y, int width, int height)
     return true;
 }
 
-
 bool ImageProcessor::rotate90CW()
 {
     // التحقق من وجود صورة
@@ -210,7 +204,6 @@ bool ImageProcessor::rotate90CW()
     
     return true;
 }
-
 
 bool ImageProcessor::rotate90CCW()
 {
@@ -234,7 +227,6 @@ bool ImageProcessor::rotate90CCW()
     return true;
 }
 
-
 bool ImageProcessor::rotate180()
 {
     // التحقق من وجود صورة
@@ -257,7 +249,6 @@ bool ImageProcessor::rotate180()
     return true;
 }
 
-
 bool ImageProcessor::flipHorizontal()
 {
     // التحقق من وجود صورة
@@ -279,30 +270,6 @@ bool ImageProcessor::flipHorizontal()
     
     return true;
 }
-
-
-bool ImageProcessor::flipHorizontal()
-{
-    // التحقق من وجود صورة
-    if (!hasImage()) {
-        return false;
-    }
-    
-    // حفظ الحالة الحالية للتراجع
-    saveState();
-    
-    // قلب الصورة أفقيًا
-    cv::flip(m_image, m_image, 1);
-    
-    // مسح سجل الإعادة
-    clearRedoStack();
-    
-    // إشعار بالتحديث
-    notifyUpdate();
-    
-    return true;
-}
-
 
 bool ImageProcessor::flipVertical()
 {
@@ -325,7 +292,6 @@ bool ImageProcessor::flipVertical()
     
     return true;
 }
-
 
 bool ImageProcessor::resize(int width, int height)
 {
@@ -353,7 +319,6 @@ bool ImageProcessor::resize(int width, int height)
     
     return true;
 }
-
 
 bool ImageProcessor::grayscale()
 {
@@ -418,7 +383,6 @@ bool ImageProcessor::sepia()
     
     return true;
 }
-
 
 bool ImageProcessor::negative()
 {
@@ -493,7 +457,6 @@ bool ImageProcessor::sharpen()
     return true;
 }
 
-
 bool ImageProcessor::edgeDetection()
 {
     // التحقق من وجود صورة
@@ -532,7 +495,6 @@ bool ImageProcessor::edgeDetection()
     return true;
 }
 
-
 bool ImageProcessor::emboss()
 {
     // التحقق من وجود صورة
@@ -561,7 +523,6 @@ bool ImageProcessor::emboss()
     
     return true;
 }
-
 
 bool ImageProcessor::cartoon()
 {
@@ -605,7 +566,6 @@ bool ImageProcessor::cartoon()
     
     return true;
 }
-
 
 bool ImageProcessor::watercolor()
 {
@@ -682,88 +642,6 @@ bool ImageProcessor::mosaic(int blockSize)
     
     return true;
 }
-bool ImageProcessor::mosaic(int blockSize)
-{
-   // التحقق من وجود صورة
-   if (!hasImage()) {
-       return false;
-   }
-   
-   // التحقق من صحة حجم الكتلة
-   if (blockSize <= 0) {
-       return false;
-   }
-   
-   // حفظ الحالة الحالية للتراجع
-   saveState();
-   
-   // تطبيق تأثير الفسيفساء
-   int width = m_image.cols;
-   int height = m_image.rows;
-   
-   for (int y = 0; y < height; y += blockSize) {
-       for (int x = 0; x < width; x += blockSize) {
-           // تحديد منطقة الكتلة
-           cv::Rect rect(x, y, std::min(blockSize, width - x), std::min(blockSize, height - y));
-           
-           // حساب متوسط لون الكتلة
-           cv::Scalar color = cv::mean(m_image(rect));
-           
-           // تعبئة الكتلة باللون المتوسط
-           cv::rectangle(m_image, rect, color, -1);
-       }
-   }
-    
-    // مسح سجل الإعادة
-    clearRedoStack();
-    
-    // إشعار بالتحديث
-    notifyUpdate();
-    
-    return true;
-}
-bool ImageProcessor::mosaic(int blockSize)
-{
-   // التحقق من وجود صورة
-   if (!hasImage()) {
-       return false;
-   }
-   
-   // التحقق من صحة حجم الكتلة
-   if (blockSize <= 0) {
-       return false;
-   }
-   
-   // حفظ الحالة الحالية للتراجع
-   saveState();
-   
-   // تطبيق تأثير الفسيفساء
-   int width = m_image.cols;
-   int height = m_image.rows;
-   
-   for (int y = 0; y < height; y += blockSize) {
-       for (int x = 0; x < width; x += blockSize) {
-           // تحديد منطقة الكتلة
-           cv::Rect rect(x, y, std::min(blockSize, width - x), std::min(blockSize, height - y));
-           
-           // حساب متوسط لون الكتلة
-           cv::Scalar color = cv::mean(m_image(rect));
-           
-           // تعبئة الكتلة باللون المتوسط
-           cv::rectangle(m_image, rect, color, -1);
-       }
-   }
-    
-    // مسح سجل الإعادة
-    clearRedoStack();
-    
-    // إشعار بالتحديث
-    notifyUpdate();
-    
-    return true;
-}
-
-
 
 bool ImageProcessor::oilPainting(int size, int dynRatio)
 {
@@ -864,7 +742,6 @@ bool ImageProcessor::oilPainting(int size, int dynRatio)
     return true;
 }
 
-
 bool ImageProcessor::pencilSketch(bool colorOutput)
 {
     // التحقق من وجود صورة
@@ -934,9 +811,6 @@ bool ImageProcessor::pencilSketch(bool colorOutput)
     return true;
 }
 
-
-
-
 bool ImageProcessor::adjustBrightness(int value)
 {
     // التحقق من وجود صورة
@@ -958,8 +832,6 @@ bool ImageProcessor::adjustBrightness(int value)
     
     return true;
 }
-
-
 
 bool ImageProcessor::adjustContrast(int value)
 {
@@ -985,8 +857,6 @@ bool ImageProcessor::adjustContrast(int value)
     
     return true;
 }
-
-
 
 bool ImageProcessor::adjustSaturation(int value)
 {
@@ -1032,8 +902,6 @@ bool ImageProcessor::adjustSaturation(int value)
     return true;
 }
 
-
-
 bool ImageProcessor::adjustHue(int value)
 {
     // التحقق من وجود صورة
@@ -1074,9 +942,6 @@ bool ImageProcessor::adjustHue(int value)
     
     return true;
 }
-
-
-
 
 bool ImageProcessor::adjustGamma(double value)
 {
@@ -1155,53 +1020,6 @@ bool ImageProcessor::adjustTemperature(int value)
     
     return true;
 }
-
-
-
-
-
-bool ImageProcessor::adjustTemperature(int value)
-{
-    // التحقق من وجود صورة
-    if (!hasImage()) {
-        return false;
-    }
-    
-    // التحقق من أن الصورة ملونة
-    if (m_image.channels() < 3) {
-        return false;
-    }
-    
-    // حفظ الحالة الحالية للتراجع
-    saveState();
-    
-    // تقسيم القنوات
-    std::vector<cv::Mat> channels;
-    cv::split(m_image, channels);
-    
-    // تعديل درجة حرارة اللون
-    if (value > 0) {
-        // أكثر دفئًا (أكثر أحمر، أقل أزرق)
-        channels[2] = channels[2] * (1 + value / 100.0);
-        channels[0] = channels[0] * (1 - value / 200.0);
-    } else {
-        // أكثر برودة (أكثر أزرق، أقل أحمر)
-        channels[0] = channels[0] * (1 - value / 100.0);
-        channels[2] = channels[2] * (1 + value / 200.0);
-    }
-    
-    // دمج القنوات
-    cv::merge(channels, m_image);
-    
-    // مسح سجل الإعادة
-    clearRedoStack();
-    
-    // إشعار بالتحديث
-    notifyUpdate();
-    
-    return true;
-}
-
 
 bool ImageProcessor::adjustShadowsHighlights(int shadows, int highlights)
 {
@@ -1315,9 +1133,6 @@ bool ImageProcessor::autoWhiteBalance()
     return true;
 }
 
-
-
-
 bool ImageProcessor::autoContrast()
 {
     // التحقق من وجود صورة
@@ -1359,8 +1174,6 @@ bool ImageProcessor::autoContrast()
     
     return true;
 }
-
-
 
 bool ImageProcessor::autoColorEnhance()
 {
@@ -1424,9 +1237,6 @@ bool ImageProcessor::autoColorEnhance()
     return true;
 }
 
-
-
-
 bool ImageProcessor::reduceNoise(int strength)
 {
     // التحقق من وجود صورة
@@ -1457,9 +1267,6 @@ bool ImageProcessor::reduceNoise(int strength)
     
     return true;
 }
-
-
-
 
 bool ImageProcessor::sharpenAdaptive(int strength)
 {
@@ -1501,9 +1308,6 @@ bool ImageProcessor::sharpenAdaptive(int strength)
     return true;
 }
 
-
-
-
 bool ImageProcessor::reset()
 {
     // التحقق من وجود صورة
@@ -1530,8 +1334,6 @@ bool ImageProcessor::reset()
     
     return true;
 }
-
-
 
 bool ImageProcessor::cropToAspectRatio(double ratio)
 {
@@ -1578,9 +1380,6 @@ bool ImageProcessor::cropToAspectRatio(double ratio)
     return true;
 }
 
-
-
-
 bool ImageProcessor::addBorder(int size, const cv::Scalar& color)
 {
     // التحقق من وجود صورة
@@ -1609,9 +1408,6 @@ bool ImageProcessor::addBorder(int size, const cv::Scalar& color)
     
     return true;
 }
-
-
-
 
 bool ImageProcessor::addVignette(double strength)
 {
@@ -1672,8 +1468,6 @@ bool ImageProcessor::addVignette(double strength)
     
     return true;
 }
-
-
 
 bool ImageProcessor::addWatermark(const cv::Mat& watermark, double alpha, int x, int y)
 {
@@ -1739,5 +1533,32 @@ bool ImageProcessor::addWatermark(const cv::Mat& watermark, double alpha, int x,
     return true;
 }
 
+bool ImageProcessor::addText(const std::string& text, int x, int y, double scale, const cv::Scalar& color, int thickness)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة النص
+    if (text.empty()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // إضافة النص
+    cv::putText(m_image, text, cv::Point(x, y), cv::FONT_HERSHEY_SIMPLEX, scale, color, thickness);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
 
-
+} // namespace core
+} // namespace pme
