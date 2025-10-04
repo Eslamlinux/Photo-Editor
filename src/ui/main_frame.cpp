@@ -418,7 +418,6 @@ void MainFrame::onRedo(wxCommandEvent& event)
 
 void MainFrame::onAbout(wxCommandEvent& event)
 {
-    // إنشاء مربع حوار حول
     wxAboutDialogInfo info;
     info.SetName(_("Photo Editor"));
     info.SetVersion(_("1.0"));
