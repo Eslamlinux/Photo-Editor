@@ -60,3 +60,23 @@ public:
         return saveSettings();
     }
 
+ bool deleteSetting(const std::string& key) {
+        if (!m_initialized) {
+            return false;
+        }
+        
+        // حذف الإعداد من الذاكرة
+        auto it = m_settings.find(key);
+        if (it != m_settings.end()) {
+            m_settings.erase(it);
+            
+            // حفظ الإعدادات في الملف
+            return saveSettings();
+        }
+        
+        return false;
+    }
+    
+    std::map<std::string, std::string> getAllSettings() {
+        return m_settings;
+    }
