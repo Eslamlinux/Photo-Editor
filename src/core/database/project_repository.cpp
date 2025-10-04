@@ -113,3 +113,39 @@ public:
             
             // معرف المشروع
 
+
+            nextPos = line.find('|', pos);
+            if (nextPos == std::string::npos) continue;
+            project.id = std::stoi(line.substr(pos, nextPos - pos));
+            pos = nextPos + 1;
+            
+            // اسم المشروع
+            nextPos = line.find('|', pos);
+            if (nextPos == std::string::npos) continue;
+            project.name = line.substr(pos, nextPos - pos);
+            pos = nextPos + 1;
+            
+            // مسار المشروع
+            nextPos = line.find('|', pos);
+            if (nextPos == std::string::npos) continue;
+            project.path = line.substr(pos, nextPos - pos);
+            pos = nextPos + 1;
+            
+            // مسار الصورة المصغرة
+            nextPos = line.find('|', pos);
+            if (nextPos == std::string::npos) continue;
+            project.thumbnail_path = line.substr(pos, nextPos - pos);
+            pos = nextPos + 1;
+            
+            // تاريخ الإنشاء
+            nextPos = line.find('|', pos);
+            if (nextPos == std::string::npos) continue;
+            project.created_at = line.substr(pos, nextPos - pos);
+            pos = nextPos + 1;
+            
+            // تاريخ التحديث
+            project.updated_at = line.substr(pos);
+            
+            projects.push_back(project);
+        }
+        
