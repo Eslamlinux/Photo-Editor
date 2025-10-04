@@ -1503,3 +1503,32 @@ bool ImageProcessor::sharpenAdaptive(int strength)
 
 
 
+
+bool ImageProcessor::reset()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من وجود صورة أصلية
+    if (m_originalImage.empty()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // استعادة الصورة الأصلية
+    m_image = m_originalImage.clone();
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
