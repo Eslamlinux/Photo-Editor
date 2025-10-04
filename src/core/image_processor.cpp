@@ -1265,4 +1265,55 @@ bool ImageProcessor::adjustShadowsHighlights(int shadows, int highlights)
     return true;
 }
 
+bool ImageProcessor::autoWhiteBalance()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من أن الصورة ملونة
+    if (m_image.channels() < 3) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق توازن اللون الأبيض التلقائي باستخدام خوارزمية Gray World
+    std::vector<cv::Mat> channels;
+    cv::split(m_image, channels);
+    
+    // حساب متوسط كل قناة
+    cv::Scalar means = cv::mean(m_image);
+    double avgB = means[0];
+    double avgG = means[1];
+    double avgR = means[2];
+    
+    // حساب متوسط القنوات
+    double avgGray = (avgB + avgG + avgR) / 3.0;
+    
+    // حساب عوامل التصحيح
+    double factorB = avgGray / avgB;
+    double factorG = avgGray / avgG;
+    double factorR = avgGray / avgR;
+    
+    // تطبيق التصحيح
+    channels[0] = channels[0] * factorB;
+    channels[1] = channels[1] * factorG;
+    channels[2] = channels[2] * factorR;
+    
+    // دمج القنوات
+    cv::merge(channels, m_image);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
 
