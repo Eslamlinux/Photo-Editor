@@ -426,7 +426,7 @@ void MainFrame::onAbout(wxCommandEvent& event)
     info.SetCopyright(_("(C) 2025"));
     info.SetWebSite(_("https://github.com/Eslamlinux/Photo-Editor"));
     info.AddDeveloper(_("Eslam Linux"));
-    info.SetWebSite(_("https://eslamlinux.github.io/"));
+    info.AddDeveloper(_("https://eslamlinux.github.io/"));
     
     // عرض مربع حوار حول
     wxAboutBox(info);
