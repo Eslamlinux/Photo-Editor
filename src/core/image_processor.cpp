@@ -606,3 +606,38 @@ bool ImageProcessor::cartoon()
     return true;
 }
 
+
+bool ImageProcessor::watercolor()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تأثير الألوان المائية
+    cv::Mat result;
+    
+    // تطبيق مرشح ثنائي التباين
+    cv::bilateralFilter(m_image, result, 9, 150, 150);
+    
+    // تطبيق مرشح التمويه
+    cv::GaussianBlur(result, result, cv::Size(5, 5), 0);
+    
+    // تطبيق مرشح حدة
+    cv::Mat sharpened;
+    cv::GaussianBlur(result, sharpened, cv::Size(0, 0), 3);
+    cv::addWeighted(result, 1.5, sharpened, -0.5, 0, result);
+    
+    m_image = result;
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
