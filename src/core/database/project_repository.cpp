@@ -36,3 +36,42 @@ public:
     }
 
 } // namespace pme
+   bool createProject(const std::string& name, const std::string& path, const std::string& thumbnail_path) {
+        if (!m_initialized) {
+            return false;
+        }
+        
+        // قراءة المشاريع الحالية
+        std::vector<Project> projects = getAllProjects();
+        
+        // إنشاء معرف جديد
+        int newId = 1;
+        if (!projects.empty()) {
+            newId = projects.back().id + 1;
+        }
+        
+        // الحصول على الوقت الحالي
+        std::time_t now = std::time(nullptr);
+        char timeStr[20];
+        std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
+        
+        // إضافة المشروع الجديد
+        std::ofstream file(m_dbPath, std::ios::app);
+        if (!file.good()) {
+            std::cerr << "Failed to open database file for writing: " << m_dbPath << std::endl;
+            return false;
+        }
+        
+        file << newId << "|" << name << "|" << path << "|" << thumbnail_path << "|" << timeStr << "|" << timeStr << std::endl;
+        file.close();
+        
+        return true;
+    }
+    
+    std::optional<Project> getProjectById(int id) {
+        if (!m_initialized) {
+            return std::nullopt;
+        }
+        
+        // قراءة المشاريع
+
