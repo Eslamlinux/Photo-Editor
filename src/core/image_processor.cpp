@@ -468,3 +468,28 @@ bool ImageProcessor::blur(int radius)
     
     return true;
 }
+
+bool ImageProcessor::sharpen()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تأثير التحديد
+    cv::Mat blurred;
+    cv::GaussianBlur(m_image, blurred, cv::Size(0, 0), 3);
+    cv::addWeighted(m_image, 1.5, blurred, -0.5, 0, m_image);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
