@@ -1532,3 +1532,51 @@ bool ImageProcessor::reset()
 }
 
 
+
+bool ImageProcessor::cropToAspectRatio(double ratio)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة النسبة
+    if (ratio <= 0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // حساب النسبة الحالية
+    double currentRatio = static_cast<double>(getWidth()) / getHeight();
+    
+    // تحديد منطقة القص
+    cv::Rect roi;
+    
+    if (currentRatio > ratio) {
+        // الصورة أعرض من النسبة المطلوبة، قص من الجوانب
+        int newWidth = static_cast<int>(getHeight() * ratio);
+        int x = (getWidth() - newWidth) / 2;
+        roi = cv::Rect(x, 0, newWidth, getHeight());
+    } else {
+        // الصورة أطول من النسبة المطلوبة، قص من الأعلى والأسفل
+        int newHeight = static_cast<int>(getWidth() / ratio);
+        int y = (getHeight() - newHeight) / 2;
+        roi = cv::Rect(0, y, getWidth(), newHeight);
+    }
+    
+    // قص الصورة
+    m_image = m_image(roi).clone();
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
+
