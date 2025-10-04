@@ -641,3 +641,124 @@ bool ImageProcessor::watercolor()
     
     return true;
 }
+
+bool ImageProcessor::mosaic(int blockSize)
+{
+   // التحقق من وجود صورة
+   if (!hasImage()) {
+       return false;
+   }
+   
+   // التحقق من صحة حجم الكتلة
+   if (blockSize <= 0) {
+       return false;
+   }
+   
+   // حفظ الحالة الحالية للتراجع
+   saveState();
+   
+   // تطبيق تأثير الفسيفساء
+   int width = m_image.cols;
+   int height = m_image.rows;
+   
+   for (int y = 0; y < height; y += blockSize) {
+       for (int x = 0; x < width; x += blockSize) {
+           // تحديد منطقة الكتلة
+           cv::Rect rect(x, y, std::min(blockSize, width - x), std::min(blockSize, height - y));
+           
+           // حساب متوسط لون الكتلة
+           cv::Scalar color = cv::mean(m_image(rect));
+           
+           // تعبئة الكتلة باللون المتوسط
+           cv::rectangle(m_image, rect, color, -1);
+       }
+   }
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+bool ImageProcessor::mosaic(int blockSize)
+{
+   // التحقق من وجود صورة
+   if (!hasImage()) {
+       return false;
+   }
+   
+   // التحقق من صحة حجم الكتلة
+   if (blockSize <= 0) {
+       return false;
+   }
+   
+   // حفظ الحالة الحالية للتراجع
+   saveState();
+   
+   // تطبيق تأثير الفسيفساء
+   int width = m_image.cols;
+   int height = m_image.rows;
+   
+   for (int y = 0; y < height; y += blockSize) {
+       for (int x = 0; x < width; x += blockSize) {
+           // تحديد منطقة الكتلة
+           cv::Rect rect(x, y, std::min(blockSize, width - x), std::min(blockSize, height - y));
+           
+           // حساب متوسط لون الكتلة
+           cv::Scalar color = cv::mean(m_image(rect));
+           
+           // تعبئة الكتلة باللون المتوسط
+           cv::rectangle(m_image, rect, color, -1);
+       }
+   }
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+bool ImageProcessor::mosaic(int blockSize)
+{
+   // التحقق من وجود صورة
+   if (!hasImage()) {
+       return false;
+   }
+   
+   // التحقق من صحة حجم الكتلة
+   if (blockSize <= 0) {
+       return false;
+   }
+   
+   // حفظ الحالة الحالية للتراجع
+   saveState();
+   
+   // تطبيق تأثير الفسيفساء
+   int width = m_image.cols;
+   int height = m_image.rows;
+   
+   for (int y = 0; y < height; y += blockSize) {
+       for (int x = 0; x < width; x += blockSize) {
+           // تحديد منطقة الكتلة
+           cv::Rect rect(x, y, std::min(blockSize, width - x), std::min(blockSize, height - y));
+           
+           // حساب متوسط لون الكتلة
+           cv::Scalar color = cv::mean(m_image(rect));
+           
+           // تعبئة الكتلة باللون المتوسط
+           cv::rectangle(m_image, rect, color, -1);
+       }
+   }
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
