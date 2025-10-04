@@ -212,3 +212,34 @@ public:
         // قراءة المشاريع
         std::vector<Project> projects = getAllProjects();
         
+ 
+        // البحث عن المشروع وحذفه
+        bool found = false;
+        for (auto it = projects.begin(); it != projects.end(); ++it) {
+            if (it->id == id) {
+                projects.erase(it);
+                found = true;
+                break;
+            }
+        }
+        
+        if (!found) {
+            return false;
+        }
+        
+        // إعادة كتابة الملف
+        std::ofstream file(m_dbPath, std::ios::trunc);
+        if (!file.good()) {
+            std::cerr << "Failed to open database file for writing: " << m_dbPath << std::endl;
+            return false;
+        }
+        
+        for (const auto& project : projects) {
+            file << project.id << "|" << project.name << "|" << project.path << "|" 
+                 << project.thumbnail_path << "|" << project.created_at << "|" << project.updated_at << std::endl;
+        }
+        
+        file.close();
+        
+        return true;
+    }
