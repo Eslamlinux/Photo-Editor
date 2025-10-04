@@ -382,3 +382,40 @@ bool ImageProcessor::grayscale()
     return true;
 }
 
+bool ImageProcessor::sepia()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تحويل الصورة إلى BGR إذا كانت بتنسيق آخر
+    cv::Mat bgrImage;
+    if (m_image.channels() == 1) {
+        cv::cvtColor(m_image, bgrImage, cv::COLOR_GRAY2BGR);
+    } else if (m_image.channels() == 4) {
+        cv::cvtColor(m_image, bgrImage, cv::COLOR_BGRA2BGR);
+    } else {
+        bgrImage = m_image.clone();
+    }
+    
+    // تطبيق مصفوفة التحويل للحصول على تأثير السيبيا
+    cv::Mat kernel = (cv::Mat_<float>(3, 3) <<
+        0.272, 0.534, 0.131,
+        0.349, 0.686, 0.168,
+        0.393, 0.769, 0.189);
+    
+    cv::transform(bgrImage, m_image, kernel);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
