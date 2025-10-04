@@ -1361,3 +1361,68 @@ bool ImageProcessor::autoContrast()
 }
 
 
+
+bool ImageProcessor::autoColorEnhance()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من أن الصورة ملونة
+    if (m_image.channels() < 3) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تحسين اللون التلقائي
+    
+    // 1. تطبيق توازن اللون الأبيض
+    autoWhiteBalance();
+    
+    // 2. تحويل الصورة إلى فضاء HSV
+    cv::Mat hsv;
+    cv::cvtColor(m_image, hsv, cv::COLOR_BGR2HSV);
+    
+    // 3. تقسيم القنوات
+    std::vector<cv::Mat> channels;
+    cv::split(hsv, channels);
+    
+    // 4. زيادة التشبع بنسبة 15%
+    channels[1] = channels[1] * 1.15;
+    
+    // 5. دمج القنوات
+    cv::merge(channels, hsv);
+    
+    // 6. تحويل الصورة إلى فضاء BGR
+    cv::cvtColor(hsv, m_image, cv::COLOR_HSV2BGR);
+    
+    // 7. تطبيق تحسين التباين
+    cv::Mat yuv;
+    cv::cvtColor(m_image, yuv, cv::COLOR_BGR2YUV);
+    
+    // تقسيم القنوات
+    cv::split(yuv, channels);
+    
+    // تطبيق معادلة المدرج التكراري على قناة الإضاءة
+    cv::equalizeHist(channels[0], channels[0]);
+    
+    // دمج القنوات
+    cv::merge(channels, yuv);
+    
+    // تحويل الصورة إلى فضاء BGR
+    cv::cvtColor(yuv, m_image, cv::COLOR_YUV2BGR);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
+
