@@ -1159,3 +1159,46 @@ bool ImageProcessor::adjustTemperature(int value)
 
 
 
+
+bool ImageProcessor::adjustTemperature(int value)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من أن الصورة ملونة
+    if (m_image.channels() < 3) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تقسيم القنوات
+    std::vector<cv::Mat> channels;
+    cv::split(m_image, channels);
+    
+    // تعديل درجة حرارة اللون
+    if (value > 0) {
+        // أكثر دفئًا (أكثر أحمر، أقل أزرق)
+        channels[2] = channels[2] * (1 + value / 100.0);
+        channels[0] = channels[0] * (1 - value / 200.0);
+    } else {
+        // أكثر برودة (أكثر أزرق، أقل أحمر)
+        channels[0] = channels[0] * (1 - value / 100.0);
+        channels[2] = channels[2] * (1 + value / 200.0);
+    }
+    
+    // دمج القنوات
+    cv::merge(channels, m_image);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
