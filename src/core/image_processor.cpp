@@ -1317,3 +1317,47 @@ bool ImageProcessor::autoWhiteBalance()
 
 
 
+
+bool ImageProcessor::autoContrast()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تعديل التباين التلقائي
+    if (m_image.channels() == 1) {
+        // تطبيق معادلة المدرج التكراري للصورة الرمادية
+        cv::equalizeHist(m_image, m_image);
+    } else {
+        // تحويل الصورة إلى فضاء YUV
+        cv::Mat yuv;
+        cv::cvtColor(m_image, yuv, cv::COLOR_BGR2YUV);
+        
+        // تقسيم القنوات
+        std::vector<cv::Mat> channels;
+        cv::split(yuv, channels);
+        
+        // تطبيق معادلة المدرج التكراري على قناة الإضاءة
+        cv::equalizeHist(channels[0], channels[0]);
+        
+        // دمج القنوات
+        cv::merge(channels, yuv);
+        
+        // تحويل الصورة إلى فضاء BGR
+        cv::cvtColor(yuv, m_image, cv::COLOR_YUV2BGR);
+    }
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
