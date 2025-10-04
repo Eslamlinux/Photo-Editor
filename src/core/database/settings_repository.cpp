@@ -40,4 +40,23 @@ public:
         if (!m_initialized) {
             return defaultValue;
         }
+       auto it = m_settings.find(key);
+        if (it != m_settings.end()) {
+            return it->second;
+        }
+        
+        return defaultValue;
+    }
+    
+    bool setSetting(const std::string& key, const std::string& value) {
+        if (!m_initialized) {
+            return false;
+        }
+        
+        // تحديث الإعداد في الذاكرة
+        m_settings[key] = value;
+        
+        // حفظ الإعدادات في الملف
+        return saveSettings();
+    }
 
