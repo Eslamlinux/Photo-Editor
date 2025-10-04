@@ -562,3 +562,47 @@ bool ImageProcessor::emboss()
     return true;
 }
 
+
+bool ImageProcessor::cartoon()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من أن الصورة ملونة
+    if (m_image.channels() < 3) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تأثير الكرتون
+    cv::Mat gray, edges, color, cartoon;
+    
+    // تحويل الصورة إلى تدرج الرمادي
+    cv::cvtColor(m_image, gray, cv::COLOR_BGR2GRAY);
+    
+    // تطبيق مرشح ثنائي التباين
+    cv::medianBlur(gray, gray, 5);
+    
+    // كشف الحواف
+    cv::adaptiveThreshold(gray, edges, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY, 9, 9);
+    
+    // تطبيق مرشح ثنائي التباين على الصورة الملونة
+    cv::bilateralFilter(m_image, color, 9, 300, 300);
+    
+    // دمج الحواف مع الصورة الملونة
+    cv::cvtColor(edges, edges, cv::COLOR_GRAY2BGR);
+    cv::bitwise_and(color, edges, m_image);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
