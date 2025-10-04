@@ -423,9 +423,9 @@ void MainFrame::onAbout(wxCommandEvent& event)
     info.SetName(_("Photo Editor"));
     info.SetVersion(_("1.0"));
     info.SetDescription(_("A simple photo editor application."));
-    info.SetCopyright(_("(C) 2023"));
-    info.SetWebSite(_("https://www.example.com"));
-    info.AddDeveloper(_("Developer Name"));
+    info.SetCopyright(_("(C) 2025"));
+    info.SetWebSite(_("https://github.com/Eslamlinux/Photo-Editor"));
+    info.AddDeveloper(_("Eslam Linux"));
     
     // عرض مربع حوار حول
     wxAboutBox(info);
