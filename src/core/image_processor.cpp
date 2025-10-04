@@ -1580,3 +1580,35 @@ bool ImageProcessor::cropToAspectRatio(double ratio)
 
 
 
+
+bool ImageProcessor::addBorder(int size, const cv::Scalar& color)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة حجم الحدود
+    if (size <= 0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // إضافة حدود
+    cv::Mat result;
+    cv::copyMakeBorder(m_image, result, size, size, size, size, cv::BORDER_CONSTANT, color);
+    m_image = result;
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
+
