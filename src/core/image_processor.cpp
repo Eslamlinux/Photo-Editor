@@ -936,3 +936,27 @@ bool ImageProcessor::pencilSketch(bool colorOutput)
 
 
 
+
+bool ImageProcessor::adjustBrightness(int value)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تعديل السطوع
+    m_image.convertTo(m_image, -1, 1, value);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
