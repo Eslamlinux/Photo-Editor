@@ -419,3 +419,52 @@ bool ImageProcessor::sepia()
     return true;
 }
 
+
+bool ImageProcessor::negative()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تأثير السلبي
+    cv::bitwise_not(m_image, m_image);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+bool ImageProcessor::blur(int radius)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة نصف القطر
+    if (radius <= 0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تأثير التمويه
+    cv::GaussianBlur(m_image, m_image, cv::Size(2 * radius + 1, 2 * radius + 1), 0);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
