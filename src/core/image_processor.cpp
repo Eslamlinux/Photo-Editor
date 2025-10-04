@@ -1077,3 +1077,39 @@ bool ImageProcessor::adjustHue(int value)
 
 
 
+
+bool ImageProcessor::adjustGamma(double value)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة قيمة جاما
+    if (value <= 0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // إنشاء جدول البحث
+    cv::Mat lookUpTable(1, 256, CV_8U);
+    uchar* p = lookUpTable.ptr();
+    
+    // ملء جدول البحث
+    for (int i = 0; i < 256; ++i) {
+        p[i] = cv::saturate_cast<uchar>(pow(i / 255.0, 1.0 / value) * 255.0);
+    }
+    
+    // تطبيق تعديل جاما
+    cv::LUT(m_image, lookUpTable, m_image);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
