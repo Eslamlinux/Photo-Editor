@@ -34,9 +34,8 @@ public:
         
         return m_initialized;
     }
-
-} // namespace pme
-   bool createProject(const std::string& name, const std::string& path, const std::string& thumbnail_path) {
+    
+    bool createProject(const std::string& name, const std::string& path, const std::string& thumbnail_path) {
         if (!m_initialized) {
             return false;
         }
@@ -74,8 +73,7 @@ public:
         }
         
         // قراءة المشاريع
-
-  std::vector<Project> projects = getAllProjects();
+        std::vector<Project> projects = getAllProjects();
         
         // البحث عن المشروع
         for (const auto& project : projects) {
@@ -112,8 +110,6 @@ public:
             size_t nextPos = 0;
             
             // معرف المشروع
-
-
             nextPos = line.find('|', pos);
             if (nextPos == std::string::npos) continue;
             project.id = std::stoi(line.substr(pos, nextPos - pos));
@@ -149,7 +145,6 @@ public:
             projects.push_back(project);
         }
         
-
         file.close();
         
         return projects;
@@ -188,8 +183,7 @@ public:
         
         // إعادة كتابة الملف
         std::ofstream file(m_dbPath, std::ios::trunc);
-
-      if (!file.good()) {
+        if (!file.good()) {
             std::cerr << "Failed to open database file for writing: " << m_dbPath << std::endl;
             return false;
         }
@@ -212,7 +206,6 @@ public:
         // قراءة المشاريع
         std::vector<Project> projects = getAllProjects();
         
- 
         // البحث عن المشروع وحذفه
         bool found = false;
         for (auto it = projects.begin(); it != projects.end(); ++it) {
@@ -243,3 +236,42 @@ public:
         
         return true;
     }
+    
+private:
+    bool m_initialized;
+    std::string m_dbPath;
+};
+
+// تنفيذ واجهة المستودع
+ProjectRepository::ProjectRepository() : m_impl(std::make_unique<Impl>()) {
+}
+
+ProjectRepository::~ProjectRepository() = default;
+
+bool ProjectRepository::initialize() {
+    return m_impl->initialize();
+}
+
+bool ProjectRepository::createProject(const std::string& name, const std::string& path, const std::string& thumbnail_path) {
+    return m_impl->createProject(name, path, thumbnail_path);
+}
+
+std::optional<Project> ProjectRepository::getProjectById(int id) {
+    return m_impl->getProjectById(id);
+}
+
+std::vector<Project> ProjectRepository::getAllProjects() {
+    return m_impl->getAllProjects();
+}
+
+bool ProjectRepository::updateProject(int id, const std::string& name, const std::string& path, const std::string& thumbnail_path) {
+    return m_impl->updateProject(id, name, path, thumbnail_path);
+}
+
+bool ProjectRepository::deleteProject(int id) {
+    return m_impl->deleteProject(id);
+}
+
+} // namespace database
+} // namespace core
+} // namespace pme
