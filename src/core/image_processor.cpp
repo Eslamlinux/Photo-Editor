@@ -762,3 +762,105 @@ bool ImageProcessor::mosaic(int blockSize)
     
     return true;
 }
+
+
+
+bool ImageProcessor::oilPainting(int size, int dynRatio)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة المعاملات
+    if (size <= 0 || dynRatio <= 0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تأثير الرسم الزيتي
+    cv::Mat result = m_image.clone();
+    
+    // تحويل الصورة إلى تدرج الرمادي للحصول على قيم الكثافة
+    cv::Mat gray;
+    if (m_image.channels() == 1) {
+        gray = m_image.clone();
+    } else {
+        cv::cvtColor(m_image, gray, cv::COLOR_BGR2GRAY);
+    }
+    
+    // تطبيق الخوارزمية
+    int width = m_image.cols;
+    int height = m_image.rows;
+    int channels = m_image.channels();
+    
+    for (int y = size; y < height - size; y++) {
+        for (int x = size; x < width - size; x++) {
+            // مصفوفة لتخزين تكرار كل كثافة
+            std::vector<int> intensityCount(256, 0);
+            std::vector<cv::Vec3f> intensitySum(256, cv::Vec3f(0, 0, 0));
+            
+            // حساب تكرار كل كثافة في المنطقة المحيطة
+            for (int ky = -size; ky <= size; ky++) {
+                for (int kx = -size; kx <= size; kx++) {
+                    int intensity = gray.at<uchar>(y + ky, x + kx);
+                    intensityCount[intensity]++;
+                    
+                    if (channels == 1) {
+                        intensitySum[intensity][0] += m_image.at<uchar>(y + ky, x + kx);
+                    } else if (channels == 3) {
+                        cv::Vec3b pixel = m_image.at<cv::Vec3b>(y + ky, x + kx);
+                        intensitySum[intensity][0] += pixel[0];
+                        intensitySum[intensity][1] += pixel[1];
+                        intensitySum[intensity][2] += pixel[2];
+                    } else if (channels == 4) {
+                        cv::Vec4b pixel = m_image.at<cv::Vec4b>(y + ky, x + kx);
+                        intensitySum[intensity][0] += pixel[0];
+                        intensitySum[intensity][1] += pixel[1];
+                        intensitySum[intensity][2] += pixel[2];
+                    }
+                }
+            }
+            
+            // البحث عن الكثافة الأكثر تكرارًا
+            int maxCount = 0;
+            int maxIntensity = 0;
+            for (int i = 0; i < 256; i++) {
+                if (intensityCount[i] > maxCount) {
+                    maxCount = intensityCount[i];
+                    maxIntensity = i;
+                }
+            }
+            
+            // تعيين اللون الجديد
+            if (channels == 1) {
+                result.at<uchar>(y, x) = intensitySum[maxIntensity][0] / maxCount;
+            } else if (channels == 3) {
+                cv::Vec3b& pixel = result.at<cv::Vec3b>(y, x);
+                pixel[0] = intensitySum[maxIntensity][0] / maxCount;
+                pixel[1] = intensitySum[maxIntensity][1] / maxCount;
+                pixel[2] = intensitySum[maxIntensity][2] / maxCount;
+            } else if (channels == 4) {
+                cv::Vec4b& pixel = result.at<cv::Vec4b>(y, x);
+                pixel[0] = intensitySum[maxIntensity][0] / maxCount;
+                pixel[1] = intensitySum[maxIntensity][1] / maxCount;
+                pixel[2] = intensitySum[maxIntensity][2] / maxCount;
+                // الحفاظ على قناة ألفا
+                pixel[3] = m_image.at<cv::Vec4b>(y, x)[3];
+            }
+        }
+    }
+    
+    m_image = result;
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
