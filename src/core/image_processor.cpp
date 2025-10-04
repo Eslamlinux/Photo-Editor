@@ -864,3 +864,75 @@ bool ImageProcessor::oilPainting(int size, int dynRatio)
     return true;
 }
 
+
+bool ImageProcessor::pencilSketch(bool colorOutput)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تأثير الرسم بالقلم الرصاص
+    cv::Mat gray, inverted, blurred, sketch;
+    
+    // تحويل الصورة إلى تدرج الرمادي
+    if (m_image.channels() == 1) {
+        gray = m_image.clone();
+    } else {
+        cv::cvtColor(m_image, gray, cv::COLOR_BGR2GRAY);
+    }
+    
+    // عكس الصورة
+    cv::bitwise_not(gray, inverted);
+    
+    // تطبيق مرشح التمويه
+    cv::GaussianBlur(inverted, blurred, cv::Size(21, 21), 0);
+    
+    // دمج الصورة الأصلية مع الصورة المموهة
+    cv::divide(gray, 255 - blurred, sketch, 256);
+    
+    if (colorOutput && m_image.channels() >= 3) {
+        // إنشاء نسخة ملونة من الرسم
+        cv::Mat colorSketch;
+        cv::cvtColor(sketch, colorSketch, cv::COLOR_GRAY2BGR);
+        
+        // استخراج القنوات الملونة من الصورة الأصلية
+        std::vector<cv::Mat> channels;
+        cv::split(m_image, channels);
+        
+        // تطبيق تأثير الرسم على كل قناة
+        for (int i = 0; i < 3; i++) {
+            channels[i] = channels[i].mul(colorSketch, 1.0 / 255.0);
+        }
+        
+        // دمج القنوات
+        cv::merge(channels, m_image);
+    } else {
+        // استخدام الرسم بالأبيض والأسود
+        if (m_image.channels() == 3 || m_image.channels() == 4) {
+            cv::cvtColor(sketch, m_image, cv::COLOR_GRAY2BGR);
+            if (m_image.channels() == 4) {
+                // الحفاظ على قناة ألفا
+                cv::Mat alpha;
+                cv::extractChannel(m_image, alpha, 3);
+                cv::insertChannel(alpha, m_image, 3);
+            }
+        } else {
+            m_image = sketch;
+        }
+    }
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
+
