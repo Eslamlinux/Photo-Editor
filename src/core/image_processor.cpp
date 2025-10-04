@@ -493,3 +493,42 @@ bool ImageProcessor::sharpen()
     return true;
 }
 
+
+bool ImageProcessor::edgeDetection()
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تحويل الصورة إلى تدرج الرمادي إذا لزم الأمر
+    cv::Mat grayImage;
+    if (m_image.channels() == 1) {
+        grayImage = m_image.clone();
+    } else {
+        cv::cvtColor(m_image, grayImage, cv::COLOR_BGR2GRAY);
+    }
+    
+    // تطبيق كشف الحواف
+    cv::Mat edges;
+    cv::Canny(grayImage, edges, 50, 150);
+    
+    // تحويل الصورة إلى BGR إذا كانت الصورة الأصلية ملونة
+    if (m_image.channels() == 3) {
+        cv::cvtColor(edges, m_image, cv::COLOR_GRAY2BGR);
+    } else {
+        m_image = edges;
+    }
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
