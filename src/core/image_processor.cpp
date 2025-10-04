@@ -1460,3 +1460,46 @@ bool ImageProcessor::reduceNoise(int strength)
 
 
 
+
+bool ImageProcessor::sharpenAdaptive(int strength)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة قوة التحديد
+    if (strength <= 0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تحديد تكيفي
+    cv::Mat blurred, laplacian, sharpened;
+    
+    // تطبيق مرشح التمويه
+    cv::GaussianBlur(m_image, blurred, cv::Size(0, 0), 3);
+    
+    // تطبيق مرشح لابلاس
+    cv::Laplacian(blurred, laplacian, CV_16S, 3);
+    
+    // تحويل النتيجة إلى CV_8U
+    cv::convertScaleAbs(laplacian, laplacian);
+    
+    // تطبيق التحديد التكيفي
+    double alpha = strength / 100.0;
+    cv::addWeighted(m_image, 1.0 + alpha, laplacian, -alpha, 0, m_image);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
+
