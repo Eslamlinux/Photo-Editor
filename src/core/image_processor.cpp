@@ -1426,3 +1426,37 @@ bool ImageProcessor::autoColorEnhance()
 
 
 
+
+bool ImageProcessor::reduceNoise(int strength)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من صحة قوة التقليل
+    if (strength <= 0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تطبيق تقليل الضوضاء
+    cv::Mat result;
+    
+    // استخدام مرشح غير محلي متوسط
+    cv::fastNlMeansDenoisingColored(m_image, result, strength, strength, 7, 21);
+    m_image = result;
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
+
