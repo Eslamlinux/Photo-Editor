@@ -960,3 +960,30 @@ bool ImageProcessor::adjustBrightness(int value)
 }
 
 
+
+bool ImageProcessor::adjustContrast(int value)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تحويل قيمة التباين إلى عامل
+    double factor = (100.0 + value) / 100.0;
+    
+    // تطبيق تعديل التباين
+    m_image.convertTo(m_image, -1, factor, 0);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
