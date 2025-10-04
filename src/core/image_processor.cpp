@@ -987,3 +987,49 @@ bool ImageProcessor::adjustContrast(int value)
 }
 
 
+
+bool ImageProcessor::adjustSaturation(int value)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من أن الصورة ملونة
+    if (m_image.channels() < 3) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تحويل قيمة التشبع إلى عامل
+    double factor = (100.0 + value) / 100.0;
+    
+    // تحويل الصورة إلى فضاء HSV
+    cv::Mat hsv;
+    cv::cvtColor(m_image, hsv, cv::COLOR_BGR2HSV);
+    
+    // تقسيم القنوات
+    std::vector<cv::Mat> channels;
+    cv::split(hsv, channels);
+    
+    // تعديل قناة التشبع
+    channels[1] = channels[1] * factor;
+    
+    // دمج القنوات
+    cv::merge(channels, hsv);
+    
+    // تحويل الصورة إلى فضاء BGR
+    cv::cvtColor(hsv, m_image, cv::COLOR_HSV2BGR);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
