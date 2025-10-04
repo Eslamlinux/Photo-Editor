@@ -40,7 +40,8 @@ public:
         if (!m_initialized) {
             return defaultValue;
         }
-       auto it = m_settings.find(key);
+        
+        auto it = m_settings.find(key);
         if (it != m_settings.end()) {
             return it->second;
         }
@@ -59,8 +60,8 @@ public:
         // حفظ الإعدادات في الملف
         return saveSettings();
     }
-
- bool deleteSetting(const std::string& key) {
+    
+    bool deleteSetting(const std::string& key) {
         if (!m_initialized) {
             return false;
         }
@@ -113,4 +114,50 @@ private:
         
         file.close();
     }
+    
+    bool saveSettings() {
+        std::ofstream file(m_dbPath, std::ios::trunc);
+        if (!file.good()) {
+            std::cerr << "Failed to open settings file for writing: " << m_dbPath << std::endl;
+            return false;
+        }
+        
+        for (const auto& [key, value] : m_settings) {
+            file << key << "=" << value << std::endl;
+        }
+        
+        file.close();
+        
+        return true;
+    }
+};
 
+// تنفيذ واجهة المستودع
+SettingsRepository::SettingsRepository() : m_impl(std::make_unique<Impl>()) {
+}
+
+SettingsRepository::~SettingsRepository() = default;
+
+bool SettingsRepository::initialize() {
+    return m_impl->initialize();
+}
+
+std::string SettingsRepository::getSetting(const std::string& key, const std::string& defaultValue) {
+    return m_impl->getSetting(key, defaultValue);
+}
+
+bool SettingsRepository::setSetting(const std::string& key, const std::string& value) {
+    return m_impl->setSetting(key, value);
+}
+
+bool SettingsRepository::deleteSetting(const std::string& key) {
+    return m_impl->deleteSetting(key);
+}
+
+std::map<std::string, std::string> SettingsRepository::getAllSettings() {
+    return m_impl->getAllSettings();
+}
+
+} // namespace database
+} // namespace core
+} // namespace pme
