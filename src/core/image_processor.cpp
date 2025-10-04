@@ -1674,3 +1674,70 @@ bool ImageProcessor::addVignette(double strength)
 }
 
 
+
+bool ImageProcessor::addWatermark(const cv::Mat& watermark, double alpha, int x, int y)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // التحقق من وجود العلامة المائية
+    if (watermark.empty()) {
+        return false;
+    }
+    
+    // التحقق من صحة معامل الشفافية
+    if (alpha < 0 || alpha > 1.0) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تحديد موضع العلامة المائية
+    if (x < 0) {
+        x = (m_image.cols - watermark.cols) / 2;
+    }
+    if (y < 0) {
+        y = (m_image.rows - watermark.rows) / 2;
+    }
+    
+    // التحقق من أن العلامة المائية تناسب الصورة
+    if (x + watermark.cols > m_image.cols || y + watermark.rows > m_image.rows) {
+        return false;
+    }
+    
+    // تحديد منطقة الاهتمام
+    cv::Rect roi(x, y, watermark.cols, watermark.rows);
+    cv::Mat imageROI = m_image(roi);
+    
+    // إضافة العلامة المائية
+    if (watermark.channels() == 4) {
+        // العلامة المائية تحتوي على قناة ألفا
+        cv::Mat bgra[4];
+        cv::split(watermark, bgra);
+        
+        // استخدام قناة ألفا كقناع
+        cv::Mat mask = bgra[3];
+        
+        // دمج العلامة المائية مع الصورة
+        for (int c = 0; c < 3; c++) {
+            imageROI.col(c) = imageROI.col(c) * (1.0 - alpha * mask / 255.0) + bgra[c] * (alpha * mask / 255.0);
+        }
+    } else {
+        // دمج العلامة المائية مع الصورة
+        cv::addWeighted(imageROI, 1.0 - alpha, watermark, alpha, 0, imageROI);
+    }
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
+
