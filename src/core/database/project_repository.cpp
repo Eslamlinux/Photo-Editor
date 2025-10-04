@@ -75,3 +75,41 @@ public:
         
         // قراءة المشاريع
 
+  std::vector<Project> projects = getAllProjects();
+        
+        // البحث عن المشروع
+        for (const auto& project : projects) {
+            if (project.id == id) {
+                return project;
+            }
+        }
+        
+        return std::nullopt;
+    }
+    
+    std::vector<Project> getAllProjects() {
+        std::vector<Project> projects;
+        
+        if (!m_initialized) {
+            return projects;
+        }
+        
+        // قراءة المشاريع من الملف
+        std::ifstream file(m_dbPath);
+        if (!file.good()) {
+            std::cerr << "Failed to open database file for reading: " << m_dbPath << std::endl;
+            return projects;
+        }
+        
+        std::string line;
+        while (std::getline(file, line)) {
+            if (line.empty()) {
+                continue;
+            }
+            
+            Project project;
+            size_t pos = 0;
+            size_t nextPos = 0;
+            
+            // معرف المشروع
+
