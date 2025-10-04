@@ -1202,3 +1202,67 @@ bool ImageProcessor::adjustTemperature(int value)
     return true;
 }
 
+
+bool ImageProcessor::adjustShadowsHighlights(int shadows, int highlights)
+{
+    // التحقق من وجود صورة
+    if (!hasImage()) {
+        return false;
+    }
+    
+    // حفظ الحالة الحالية للتراجع
+    saveState();
+    
+    // تحويل الصورة إلى فضاء Lab
+    cv::Mat lab;
+    cv::cvtColor(m_image, lab, cv::COLOR_BGR2Lab);
+    
+    // تقسيم القنوات
+    std::vector<cv::Mat> channels;
+    cv::split(lab, channels);
+    
+    // تعديل قناة الإضاءة
+    cv::Mat& L = channels[0];
+    
+    // تعديل الظلال
+    if (shadows > 0) {
+        // زيادة الظلال
+        cv::Mat mask;
+        cv::threshold(L, mask, 128, 255, cv::THRESH_BINARY_INV);
+        L = L + (shadows / 100.0) * mask;
+    } else if (shadows < 0) {
+        // تقليل الظلال
+        cv::Mat mask;
+        cv::threshold(L, mask, 128, 255, cv::THRESH_BINARY_INV);
+        L = L * (1 + shadows / 100.0) * mask + L * (1 - mask / 255.0);
+    }
+    
+    // تعديل الإضاءات
+    if (highlights > 0) {
+        // زيادة الإضاءات
+        cv::Mat mask;
+        cv::threshold(L, mask, 128, 255, cv::THRESH_BINARY);
+        L = L + (highlights / 100.0) * mask;
+    } else if (highlights < 0) {
+        // تقليل الإضاءات
+        cv::Mat mask;
+        cv::threshold(L, mask, 128, 255, cv::THRESH_BINARY);
+        L = L * (1 + highlights / 100.0) * mask + L * (1 - mask / 255.0);
+    }
+    
+    // دمج القنوات
+    cv::merge(channels, lab);
+    
+    // تحويل الصورة إلى فضاء BGR
+    cv::cvtColor(lab, m_image, cv::COLOR_Lab2BGR);
+    
+    // مسح سجل الإعادة
+    clearRedoStack();
+    
+    // إشعار بالتحديث
+    notifyUpdate();
+    
+    return true;
+}
+
+
