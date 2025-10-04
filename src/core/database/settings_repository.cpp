@@ -80,3 +80,37 @@ public:
     std::map<std::string, std::string> getAllSettings() {
         return m_settings;
     }
+    
+private:
+    bool m_initialized;
+    std::string m_dbPath;
+    std::map<std::string, std::string> m_settings;
+    
+    void loadSettings() {
+        m_settings.clear();
+        
+        std::ifstream file(m_dbPath);
+        if (!file.good()) {
+            return;
+        }
+        
+        std::string line;
+        while (std::getline(file, line)) {
+            if (line.empty()) {
+                continue;
+            }
+            
+            size_t pos = line.find('=');
+            if (pos == std::string::npos) {
+                continue;
+            }
+            
+            std::string key = line.substr(0, pos);
+            std::string value = line.substr(pos + 1);
+            
+            m_settings[key] = value;
+        }
+        
+        file.close();
+    }
+
